@@ -2082,6 +2082,10 @@ html[data-theme=dark] .la-tl>li.done>button .n,html[data-theme=dark] .la-tl>li.o
   .soon-line{margin-top:5pt;padding:5pt 8pt;font-size:8.5pt;line-height:11pt;gap:6pt}.soon-line svg{width:10pt;height:10pt}
   .inn .ctv{font-size:6.5pt;line-height:8pt;top:-1pt}
 }
+
+/* left navigation without a scroll bar (owner, Oct 8): it still scrolls, and follows the page on its own */
+.toc,.toc-body{scrollbar-width:none;-ms-overflow-style:none}
+.toc::-webkit-scrollbar,.toc-body::-webkit-scrollbar{display:none;width:0;height:0}
 </style>
 
 <div class="cover">
@@ -3109,12 +3113,16 @@ html[data-theme=dark] .la-tl>li.done>button .n,html[data-theme=dark] .la-tl>li.o
   </div>
 </article>
 
-<article class="inn nofig" id="tgc-map-list">
+<article class="inn" id="tgc-map-list">
   <div class="hd">
     <div class="label lbl">Trading Grid Cartographer</div>
     <div class="ttl"><h3>Map list and search</h3><span class="ga">Generally available</span></div>
     <p class="deck">See every map in your account and find the one you need.</p>
   </div>
+  <figure>
+    <button type="button" class="zoom" data-src="img/2026-h2/tgc-map-list.webp" aria-label="View full size: The map list with the filters open, and the map history alongside. Company names in map names and people’s names are blurred."><img src="img/2026-h2/tgc-map-list.webp" width="1582" height="809" loading="lazy" alt="Trading Grid Cartographer map list for a demo solution with the Filter By panel open for standard, status, document type, direction and translator type, 20 maps per page with name, status, standard, document type, direction and last modified, and a Map History panel listing recent comments and cloned maps."><span class="zi"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+    <figcaption><span class="cap">The map list with the filters open, and the map history alongside. Company names in map names and people’s names are blurred.</span> <button type="button" class="vfs" tabindex="-1" aria-hidden="true">View full size</button></figcaption>
+  </figure>
   <div class="txt">
     <p>Before you can work on a map, you need to find it and see where it stands. The map list shows every map in the selected solution in one table, so you can check status, direction and last change without opening each map. Search and filters cut a long list down to the maps you need in a few clicks.</p>
     <ul><li><b>Map details at a glance:</b> direction, standard, document type, status and last modified date for each map.</li><li><b>Source and target summary:</b> expand a row to see the source document version, format and layout, and the target document format and transaction.</li><li><b>Search:</b> find maps by name, document type or standard, or search inside the Name column for one specific map.</li><li><b>Filters:</b> narrow the list by document standard, document type, status and direction, and click Clear All to start again.</li><li><b>Recently accessed maps:</b> switch between all maps in the solution and the maps you opened lately.</li><li><b>Solution switch:</b> change the solution ID to see the maps of another company identifier that you have access to.</li><li><b>Quick actions:</b> open comments, metadata, downloads or map history, or duplicate a map, from the icons on each row.</li></ul>
@@ -3190,12 +3198,16 @@ html[data-theme=dark] .la-tl>li.done>button .n,html[data-theme=dark] .la-tl>li.o
   </div>
 </article>
 
-<article class="inn nofig" id="tgc-xref">
+<article class="inn" id="tgc-xref">
   <div class="hd">
     <div class="label lbl">Trading Grid Cartographer</div>
     <div class="ttl"><h3>Cross-reference table view</h3><span class="ga">Generally available</span></div>
     <p class="deck">Read, update and control access to the lookup tables your maps depend on.</p>
   </div>
+  <figure>
+    <button type="button" class="zoom" data-src="img/2026-h2/tgc-xref.webp" aria-label="View full size: The Reference data tab: each cross-reference table with its reservation lock and last change, and the table history alongside. People’s names are blurred."><img src="img/2026-h2/tgc-xref.webp" width="1594" height="831" loading="lazy" alt="The Reference data tab in Trading Grid Cartographer listing 13 cross-reference tables with name, reserved-by lock and last modified date, and a Table History panel showing table changes and system backups, each with its status."><span class="zi"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+    <figcaption><span class="cap">The Reference data tab: each cross-reference table with its reservation lock and last change, and the table history alongside. People’s names are blurred.</span> <button type="button" class="vfs" tabindex="-1" aria-hidden="true">View full size</button></figcaption>
+  </figure>
   <div class="txt">
     <p>Many maps use cross-reference tables to turn one code into another. The Reference data tab shows these tables in one place, so you can check a value, fix a row or export the data without raising a ticket. Roles and a table access list decide who can see and change each table.</p>
     <ul><li><b>Table list:</b> table name, who has it reserved, last modified date and current state.</li><li><b>Reserve before editing:</b> reserving a table locks it so that only one person edits at a time, and others can still read it.</li><li><b>Edit rows:</b> add, duplicate, delete or update rows, then save with Update Table to see a summary of your changes.</li><li><b>Upload:</b> merge new rows, replace the whole table or make incremental updates from a CSV file.</li><li><b>Download and export:</b> download one table as CSV, or export all tables and get an email when they are ready.</li><li><b>History, undo and revert:</b> see who changed what and when, undo recent changes, or return a table to the last nightly archive.</li><li><b>Access by table:</b> your administrator decides which tables each person can see, so users only see the tables that are relevant to them.</li><li><b>Separate environments:</b> pre-production and production tables are not synchronized, so make each change in both.</li></ul>
@@ -3203,12 +3215,16 @@ html[data-theme=dark] .la-tl>li.done>button .n,html[data-theme=dark] .la-tl>li.o
   </div>
 </article>
 
-<article class="inn nofig" id="tgc-comments">
+<article class="inn" id="tgc-comments">
   <div class="hd">
     <div class="label lbl">Trading Grid Cartographer</div>
     <div class="ttl"><h3>Comments on all maps</h3><span class="ga">Generally available</span></div>
     <p class="deck">Keep notes about a map where the map lives.</p>
   </div>
+  <figure>
+    <button type="button" class="zoom" data-src="img/2026-h2/tgc-comments.webp" aria-label="View full size: A comment on a target field in the map, with the field’s links and function beside it. People’s names are blurred."><img src="img/2026-h2/tgc-comments.webp" width="1582" height="821" loading="lazy" alt="A map open in Trading Grid Cartographer with source and target trees; the panel for the target field PID01, Item Description Type, shows a comment asking for a reference data lookup based on the item unit of measure, then the field’s links and function steps."><span class="zi"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+    <figcaption><span class="cap">A comment on a target field in the map, with the field’s links and function beside it. People’s names are blurred.</span> <button type="button" class="vfs" tabindex="-1" aria-hidden="true">View full size</button></figcaption>
+  </figure>
   <div class="txt">
     <p>Knowledge about a map often sits in email or in one person’s head. Comments keep it on the map, where anyone who opens the map can read it. Comments are available on all maps, whichever translator they use.</p>
     <ul><li><b>Add and reply:</b> write a comment on a map or reply to one that is already there.</li><li><b>Comment indicator:</b> the comment icon is clear when a map has no comments.</li><li><b>Describe a map:</b> explain to your team how a map is used.</li><li><b>Change requests:</b> for maps that do not use OpenText Contivo Analyst, select the comments to include in a work order for Professional Services, and track the request ID in Community Projects.</li><li><b>History:</b> comment activity appears in map history, and depending on your user level you can edit or delete a comment.</li></ul>
@@ -3216,12 +3232,16 @@ html[data-theme=dark] .la-tl>li.done>button .n,html[data-theme=dark] .la-tl>li.o
   </div>
 </article>
 
-<article class="inn nofig" id="tgc-tree">
+<article class="inn" id="tgc-tree">
   <div class="hd">
     <div class="label lbl">Trading Grid Cartographer</div>
     <div class="ttl"><h3>Map tree view</h3><span class="ga">Generally available</span><span class="ctv">Built for Contivo</span></div>
     <p class="deck">Browse the source and target structure of a Contivo map.</p>
   </div>
+  <figure>
+    <button type="button" class="zoom" data-src="img/2026-h2/tgc-tree.webp" aria-label="View full size: Source and target trees of a Contivo map, with the selected field’s links, function and properties."><img src="img/2026-h2/tgc-tree.webp" width="1577" height="821" loading="lazy" alt="The map tree view in Trading Grid Cartographer: the IDoc source tree with the PRZNT field selected, the X12 810 invoice target tree with the ITD terms segment open, and the panel for ITD03, Terms Discount Percent, showing its link, function steps and properties such as name and occurrence limits."><span class="zi"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+    <figcaption><span class="cap">Source and target trees of a Contivo map, with the selected field’s links, function and properties.</span> <button type="button" class="vfs" tabindex="-1" aria-hidden="true">View full size</button></figcaption>
+  </figure>
   <div class="txt">
     <p>To understand a map, you first need to know what it reads and what it writes. The map tree view shows the source and target structures, so you can find a field and see where it sits.</p>
     <ul><li><b>Source and target trees:</b> browse both structures, from the top level down to individual fields.</li><li><b>Field properties:</b> select a field to see details such as its type and whether it is required.</li><li><b>Search the tree:</b> find a field by name in a large structure.</li><li><b>Mapped and unmapped fields:</b> see which fields have a rule and which do not.</li><li><b>Rule explanations:</b> when you want to know how a field gets its value, use the <a href="#tgc-rule-explorer">mapping rule explorer</a>.</li></ul>
@@ -3229,12 +3249,16 @@ html[data-theme=dark] .la-tl>li.done>button .n,html[data-theme=dark] .la-tl>li.o
   </div>
 </article>
 
-<article class="inn nofig" id="tgc-parse">
+<article class="inn" id="tgc-parse">
   <div class="hd">
     <div class="label lbl">Trading Grid Cartographer</div>
     <div class="ttl"><h3>Parse and translate</h3><span class="ga">Generally available</span><span class="ctv">Built for Contivo</span></div>
     <p class="deck">Run a payload through a Contivo map and see the result.</p>
   </div>
+  <figure>
+    <button type="button" class="zoom" data-src="img/2026-h2/tgc-parse.webp" aria-label="View full size: After a test run: the sample payload’s values beside the source tree and the translated values beside the target tree."><img src="img/2026-h2/tgc-parse.webp" width="1582" height="821" loading="lazy" alt="Parse and translate in Trading Grid Cartographer: a Run Map test successful message, the IDoc source tree with the sample values beside each field, and the X12 810 target tree with the translated values, with zero errors and zero warnings."><span class="zi"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+    <figcaption><span class="cap">After a test run: the sample payload’s values beside the source tree and the translated values beside the target tree.</span> <button type="button" class="vfs" tabindex="-1" aria-hidden="true">View full size</button></figcaption>
+  </figure>
   <div class="txt">
     <p>Seeing the structure of a map helps, but seeing what the map does with real data helps more. From the map tree view, you can bring in a payload, parse it against the source structure and translate it with the map, so you see the output without leaving the map.</p>
     <ul><li><b>Parse:</b> load a payload and see its values placed in the source tree.</li><li><b>Translate:</b> run the payload through the Contivo map and see the target output.</li><li><b>Check a value:</b> compare the input and the output to confirm a field was mapped as you expect.</li><li><b>Errors:</b> see parse and translation errors, so you can tell whether the problem is in the data or in the map.</li></ul>
@@ -3259,12 +3283,16 @@ html[data-theme=dark] .la-tl>li.done>button .n,html[data-theme=dark] .la-tl>li.o
   </div>
 </article>
 
-<article class="inn nofig" id="tgc-annotations">
+<article class="inn" id="tgc-annotations">
   <div class="hd">
     <div class="label lbl">Trading Grid Cartographer</div>
     <div class="ttl"><h3>Map annotations</h3><span class="ga">Generally available</span><span class="ctv">Built for Contivo</span></div>
     <p class="deck">Mark up a map with the changes you want and share them with Professional Services.</p>
   </div>
+  <figure>
+    <button type="button" class="zoom" data-src="img/2026-h2/tgc-annotations.webp" aria-label="View full size: An annotation on a target field under a work order for Professional Services, with the reply that the change is done. People’s names are blurred."><img src="img/2026-h2/tgc-annotations.webp" width="1582" height="809" loading="lazy" alt="A map in Trading Grid Cartographer with the panel for REF01, Reference Identification Qualifier, showing an annotation under work order 508378.001 asking to write AA when the qualifier is 01 and IA in all other cases, and a reply saying the change is done and deployed."><span class="zi"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+    <figcaption><span class="cap">An annotation on a target field under a work order for Professional Services, with the reply that the change is done. People’s names are blurred.</span> <button type="button" class="vfs" tabindex="-1" aria-hidden="true">View full size</button></figcaption>
+  </figure>
   <div class="txt">
     <p>Telling a mapper what to change is easier when you can point to the exact place. Annotations let you write mapping requirements on a Contivo map, so Professional Services sees what you mean without a long email.</p>
     <ul><li><b>Requirements on the map:</b> write down what needs to change, in the web interface, next to the map it applies to.</li><li><b>Shared with Professional Services:</b> annotations tell the team what changes to make, and both sides can reply.</li><li><b>Duplicate and annotate:</b> clone a map that you used with one trading partner and annotate it for another. The clone is for requirements only.</li><li><b>History:</b> annotation actions are recorded in map history, and depending on your user level you can edit or delete an annotation.</li><li><b>Both environments:</b> map annotation is available in pre-production and in production.</li></ul>
@@ -3793,7 +3821,7 @@ dlg.addEventListener('close',function(){st.innerHTML='';show(zi);op.focus({preve
     else{var ct=-1e9;links.forEach(function(a){var t=document.getElementById(a.getAttribute('href').slice(1));if(!t||t.offsetParent===null)return;var y=t.getBoundingClientRect().top;if(y<160&&y>ct+1){cur=a;ct=y;}});}
     links.forEach(function(a){a.classList.toggle('active',a===cur);});
     var c=p.querySelector('.toc-head .cur');if(c)c.textContent=cur.textContent;
-    var gi=cur.closest('li.gi');[].slice.call(p.querySelectorAll('.toc li.gi')).forEach(function(li){var on=li===gi;li.classList.toggle('in',on);if(on)li.classList.add('open');else if(!li.dataset.pinned)li.classList.remove('open');var b=li.querySelector('.tog');if(b)b.setAttribute('aria-expanded',li.classList.contains('open')?'true':'false');});}
+    var gi=cur.closest('li.gi');[].slice.call(p.querySelectorAll('.toc li.gi')).forEach(function(li){var on=li===gi;li.classList.toggle('in',on);if(on)li.classList.add('open');else if(!li.dataset.pinned)li.classList.remove('open');var b=li.querySelector('.tog');if(b)b.setAttribute('aria-expanded',li.classList.contains('open')?'true':'false');});var tc=cur.closest('.toc');if(tc&&tc.scrollHeight>tc.clientHeight+1&&getComputedStyle(tc).overflowY!=='visible'&&!tc.matches(':hover')){var sr=tc.getBoundingClientRect(),lr=cur.getBoundingClientRect();if(lr.top<sr.top+48)tc.scrollTop-=sr.top+48-lr.top;else if(lr.bottom>sr.bottom-48)tc.scrollTop+=lr.bottom-(sr.bottom-48);}}
   window.addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(spy);}},{passive:true});
   [].slice.call(document.querySelectorAll('.toc .tog')).forEach(function(b){b.addEventListener('click',function(){var li=b.closest('li.gi');var open=!li.classList.contains('open');li.classList.toggle('open',open);if(open)li.dataset.pinned='1';else delete li.dataset.pinned;b.setAttribute('aria-expanded',open?'true':'false');});});
   [].slice.call(document.querySelectorAll('.toc-head')).forEach(function(h){h.addEventListener('click',function(){var t=h.closest('.toc');var o=!t.classList.contains('open');t.classList.toggle('open',o);h.setAttribute('aria-expanded',o?'true':'false');});});
