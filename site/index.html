@@ -3482,6 +3482,24 @@ document.addEventListener('keydown',function(e){
   show((onTh>=0?onTh:cur)+d);
   if(keep)th[cur].focus({preventScroll:true});
 });
+/* tga-tabkeys (owner, Oct 8): a click or tap on the At a glance tab leaves focus on the tab, where Left and Right would
+   switch tabs. Focus that came from the pointer hands the arrows to the slides instead (capture phase, so the tab's own
+   handler never sees them); focus that came from the keyboard keeps tab-to-tab arrows. */
+var gTab=document.getElementById('tab-at-a-glance');
+if(gTab){var gPtr=false,gDown=false;
+  gTab.addEventListener('pointerdown',function(){gDown=true;});
+  gTab.addEventListener('pointercancel',function(){gDown=false;});
+  gTab.addEventListener('focus',function(){gPtr=gDown;gDown=false;});
+  gTab.addEventListener('click',function(e){if(e.detail)gPtr=true;gDown=false;});
+  document.addEventListener('keydown',function(e){
+    if(e.target!==gTab||!gPtr||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey)return;
+    var d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(!d)return;
+    if(gTab.getAttribute('aria-selected')!=='true')return;
+    e.preventDefault();e.stopPropagation();show(cur+d);
+    // the tab can be clicked with the gallery still below the fold: bring the slide into view as it changes
+    var r=tgaMain.getBoundingClientRect(),vh=window.innerHeight||document.documentElement.clientHeight,top=parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)||0;
+    if(r.height&&(r.top<top||r.bottom>vh))tgaMain.scrollIntoView({block:r.height>vh-top?'start':'center'});
+  },true);}
 var ecoImg=[].slice.call(gal.querySelectorAll('.tgs-eco .eco-plate'));if(ecoImg.length&&window.IntersectionObserver){var io=new IntersectionObserver(function(es){if(es.some(function(x){return x.isIntersecting;})){ecoImg.forEach(function(i){i.loading='eager';});io.disconnect();}},{rootMargin:'400px'});io.observe(gal);}
 var dlg=document.querySelector('dialog.tgz'),st=dlg.querySelector('.tgz-st'),dc=dlg.querySelector('.ct'),ds=dlg.querySelector('.stp'),zi=0;
 function zshow(i){zi=(i+sc.length)%sc.length;st.innerHTML='';var c=TGS.clone(sc[zi]);c.hidden=false;st.appendChild(c);TGS.scan(st);dc.textContent=th[zi].getAttribute('data-cap');ds.textContent=(zi+1)+' of '+sc.length;}
@@ -3529,6 +3547,32 @@ dlg.addEventListener('close',function(){st.innerHTML='';show(zi);op.focus({preve
   [].slice.call(document.querySelectorAll('.toc-head')).forEach(function(h){h.addEventListener('click',function(){var t=h.closest('.toc');var o=!t.classList.contains('open');t.classList.toggle('open',o);h.setAttribute('aria-expanded',o?'true':'false');});});
   document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;[].slice.call(document.querySelectorAll('.toc.open')).forEach(function(t){t.classList.remove('open');t.querySelector('.toc-head').setAttribute('aria-expanded','false');});});
   spy();
+  /* toc-keys (owner, Oct 8): after a click in the left navigation (or with focus in it), Up and Down move to the previous
+     or next item, headers included, and scroll the page to it, until the reader clicks anywhere else on the page. The last
+     item reached is the cursor; if the reader has since scrolled it out of view, stepping continues from the section on
+     screen. At either end, and while typing or in another control, the keys scroll as usual. */
+  var tkEl=null,tkT=0,tkOn=null;
+  document.addEventListener('pointerdown',function(e){var t=e.target.closest&&e.target.closest('.toc');tkOn=t||null;},true);
+  document.addEventListener('click',function(e){var l=e.target.closest&&e.target.closest('.toc a[href^="#"]');if(l){tkEl=l;tkT=Date.now();tkOn=l.closest('.toc');}});
+  document.addEventListener('keydown',function(e){
+    var d=e.key==='ArrowDown'?1:e.key==='ArrowUp'?-1:0;if(!d||e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey||e.shiftKey)return;
+    var a=document.activeElement,inToc=a&&a.closest&&a.closest('.toc'),toc=inToc||((!a||a===document.body||a===document.documentElement)?tkOn:null);if(!toc)return;
+    if(document.querySelector('dialog[open],[aria-modal="true"]:not([hidden])'))return;
+    var body=toc.querySelector('.toc-body');if(!body||!body.getClientRects().length||getComputedStyle(body).display==='none')return;
+    var tgt=function(l){return document.getElementById(l.getAttribute('href').slice(1));};
+    var links=[].slice.call(body.querySelectorAll('a[href^="#"]')).filter(function(l){var t=tgt(l);return t&&t.offsetParent!==null;});if(!links.length)return;
+    var me=inToc?(a.tagName==='A'?a:(a.closest('li')&&a.closest('li').querySelector('a[href^="#"]'))):tkEl,i=links.indexOf(me);
+    if(i>=0&&!(me===tkEl&&Date.now()-tkT<1500)){var vh=window.innerHeight||document.documentElement.clientHeight,r=tgt(me).getBoundingClientRect();if(r.bottom<0||r.top>vh)i=-1;}
+    if(i<0)i=links.indexOf(body.querySelector('a.active'));
+    var j=i<0?(d>0?0:links.length-1):i+d;if(j<0||j>=links.length)return;
+    e.preventDefault();
+    var n=links[j],gi=n.closest('li.gi');
+    if(gi&&!gi.classList.contains('open')){gi.classList.add('open');var tg=gi.querySelector('.tog');if(tg)tg.setAttribute('aria-expanded','true');}
+    if(inToc)n.focus({preventScroll:true});
+    if(toc.scrollHeight>toc.clientHeight){var sr=toc.getBoundingClientRect(),lr=n.getBoundingClientRect();
+      if(lr.top<sr.top+12)toc.scrollTop-=sr.top+12-lr.top;else if(lr.bottom>sr.bottom-12)toc.scrollTop+=lr.bottom-(sr.bottom-12);}
+    n.click();
+  });
   // full-size screenshot viewer
   var dlg=document.querySelector('dialog.zv'),dimg=dlg.querySelector('img'),dcap=dlg.querySelector('figcaption'),opener=null;
   function openZoom(btn){var fig=btn.closest('figure');var z=fig.querySelector('.zoom');var im=z.querySelector('img');dimg.src=z.dataset.src;dimg.alt=im.alt;dcap.textContent=fig.querySelector('.cap').textContent;opener=z;if(dlg.showModal)dlg.showModal();else dlg.setAttribute('open','');}
