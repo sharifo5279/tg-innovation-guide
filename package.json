@@ -6,7 +6,7 @@
   "engines": { "node": ">=20" },
   "scripts": {
     "start": "node server/index.mjs",
-    "test": "node --test server/"
+    "test": "node --test server/visits.test.mjs"
   },
   "dependencies": {
     "@ip-location-db/dbip-city-mmdb": "2.3.2026060513",

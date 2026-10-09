@@ -40,6 +40,13 @@ export function summarizeDay(date, rows) {
   };
 }
 
+// Grid Runner plays per day from [{day, plays, players}] (one row per day that had plays), added to each day summary;
+// a day without plays gets zeros. A play is a run started; a player is a visitor id, counted once a day like visitors.
+export function addPlays(days, rows) {
+  const by = new Map(rows.map((r) => [r.day, r]));
+  return days.map((d) => { const r = by.get(d.date); return { ...d, plays: r ? +r.plays : 0, players: r ? +r.players : 0 }; });
+}
+
 // the visitor's address: Render's proxy puts the client first in X-Forwarded-For
 export function clientIp(headers, socketIp) {
   const pick = (h) => (h || "").split(",")[0].trim();

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { isBot, utcDay, addDays, place, summarizeDay, clientIp } from "./visits.mjs";
+import { isBot, utcDay, addDays, place, summarizeDay, addPlays, clientIp } from "./visits.mjs";
 
 test("bots and empty agents are skipped", () => {
   assert.equal(isBot(""), true);
@@ -27,4 +27,10 @@ test("summary counts opens, visitors and places", () => {
 test("client address from proxy headers", () => {
   assert.equal(clientIp({ "x-forwarded-for": "203.0.113.9, 10.0.0.1" }, "10.0.0.2"), "203.0.113.9");
   assert.equal(clientIp({}, "::1"), "::1");
+});
+test("Grid Runner plays join the day summaries", () => {
+  const days = [summarizeDay("2026-10-08", []), summarizeDay("2026-10-09", [])];
+  const out = addPlays(days, [{ day: "2026-10-09", plays: "5", players: "2" }]);
+  assert.deepEqual([out[0].plays, out[0].players, out[1].plays, out[1].players], [0, 0, 5, 2]);
+  assert.equal(out[1].opens, 0);
 });
