@@ -2029,6 +2029,14 @@ dialog.zv img{margin:0 auto;object-fit:contain}
 dialog.zv .bar{align-self:stretch}
 
 footer .vst.gr{margin-top:6px;padding-top:0;border-top:0}
+/* Looking ahead: Trading Grid Aviator agents in two columns (owner, Oct 10). Stage headings span both columns, agents fill
+   them row by row with the name above what the agent does, so neither stage leaves a tall gap */
+@media screen and (min-width:900px){
+  #pv-tga.inn .txt ul.agx{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px;columns:auto;max-width:none}
+  #pv-tga.inn .txt ul.agx>li.agh{grid-column:1/-1}
+  #pv-tga.inn .txt ul.agx>li:not(.agh){grid-template-columns:minmax(0,1fr);gap:4px;padding:12px 0;align-content:start}
+  #pv-tga.inn .txt ul.agx .agd{padding-left:20px}
+}
 /* ===== BEGIN dark-navy: Midnight Navy + OpenText Cobalt dark mode (owner, Oct 8). Remove this block to undo. ===== */
 @media screen{
 html[data-theme=dark]{color-scheme:dark;
