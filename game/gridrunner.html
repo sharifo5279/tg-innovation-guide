@@ -49,10 +49,21 @@
     overscroll-behavior:none;
     position:fixed;inset:0;                 /* lock the page: no iOS rubber-band scroll */
   }
+  /* the official-game line sits above the frame at all times, aligned with its left edge (owner, Oct 10) */
+  #brandbar,#frame,#ticker{
+    width:min(1280px, calc(100vw - 16px), calc((100vh - 104px) * 1.7778));
+    width:min(1280px, calc(100vw - 16px), calc((100dvh - 104px) * 1.7778));  /* iOS-correct height */
+  }
+  #brandbar{
+    display:flex;align-items:center;gap:10px;height:22px;margin-bottom:8px;flex:none;
+    font-family:var(--mono);font-size:clamp(11px,.75vw,14px);letter-spacing:.16em;text-transform:uppercase;color:var(--fg2);white-space:nowrap;overflow:hidden;
+  }
+  #brandbar b{color:var(--fg);font-weight:700;letter-spacing:.2em}
+  #brandbar i{width:6px;height:6px;border-radius:1px;background:var(--primary);box-shadow:0 0 8px rgba(0,102,255,.9);flex:none}
+  #brandbar .pad{margin-left:auto;color:var(--teal);display:none}
+  body.pad #brandbar .pad{display:inline}
   #frame{
     position:relative;
-    width:min(1280px, calc(100vw - 16px), calc((100vh - 74px) * 1.7778));
-    width:min(1280px, calc(100vw - 16px), calc((100dvh - 74px) * 1.7778));  /* iOS-correct height */
     aspect-ratio:16/9;
     border-radius:16px;
     overflow:hidden;
@@ -289,7 +300,6 @@
 
   /* ticker */
   #ticker{
-    width:min(1280px, calc(100vw - 16px));
     margin-top:10px;height:22px;overflow:hidden;
     font-family:var(--mono);font-size:11px;letter-spacing:.12em;
     color:var(--fg3);text-transform:uppercase;
@@ -590,8 +600,9 @@
   @media (max-height:540px){
     #ticker{display:none}
     body{padding:4px;padding-left:max(4px, env(safe-area-inset-left));padding-right:max(4px, env(safe-area-inset-right))}
-    #frame{width:min(1280px, calc(100vw - 8px), calc((100vh - 10px) * 1.7778))}
-    #frame{width:min(1280px, calc(100vw - 8px), calc((100dvh - 10px) * 1.7778))}
+    #brandbar,#frame{width:min(1280px, calc(100vw - 8px), calc((100vh - 32px) * 1.7778))}
+    #brandbar,#frame{width:min(1280px, calc(100vw - 8px), calc((100dvh - 32px) * 1.7778))}
+    #brandbar{height:16px;margin-bottom:4px;font-size:9px}
     #zapbtn{width:92px;height:92px;font-size:13px;right:max(14px, env(safe-area-inset-right));bottom:max(14px, env(safe-area-inset-bottom))}
   }
   @media (max-width:640px){
@@ -612,6 +623,7 @@
 </style>
 </head>
 <body>
+  <div id="brandbar"><i aria-hidden="true"></i><b>Grid Runner</b><span>The official game of Trading Grid</span><span class="pad">Controller connected</span></div>
   <div id="frame">
     <canvas id="game" width="1280" height="720"></canvas>
 
@@ -997,10 +1009,10 @@ const KCARDS = [
   {t:'OpenText Business Network', c:'BN', d:'The always-on digital trading ecosystem where enterprises, suppliers, carriers, and banks exchange business documents at machine speed.'},
   {t:'Trading Grid', c:'BN', d:'The execution backbone: it securely receives, translates, routes, tracks, and delivers billions of B2B transactions across a global partner community.'},
   {t:'Grid Runner', c:'BN', d:'You: an elite operations specialist protecting transaction flow, restoring disrupted routes, and keeping supply chains moving.'},
-  {t:'TG Insights', c:'BN', d:'The forensic visibility layer: transaction history, status transitions, delivery attempts, timestamps, and partner metadata as operational evidence.'},
+  {t:'Trading Grid Insights', c:'BN', d:'The forensic visibility layer: transaction history, status transitions, delivery attempts, timestamps, and partner metadata as operational evidence.'},
   {t:'Command Center', c:'BN', d:'The strategic control tower: turns individual transaction signals into patterns, anomalies, forecasts, and prioritized operational actions.'},
-  {t:'Performance Monitor', c:'BN', d:'Evaluates whether partners and processes perform as agreed: response times, document conformance, transaction integrity, perfect-order behavior.'},
-  {t:'Business Network Data Platform', c:'BN', d:'The governed intelligence foundation turning operational data into reusable data products for analytics, APIs, AI agents, and experiences.'},
+  {t:'Command Center Performance Monitor', c:'BN', d:'Evaluates whether partners and processes perform as agreed: response times, document conformance, transaction integrity, perfect-order behavior.'},
+  {t:'Trading Grid Data Platform', c:'BN', d:'The governed intelligence foundation turning operational data into reusable data products for analytics, APIs, AI agents, and experiences.'},
   {t:'Data Product', c:'BN', d:'A protected knowledge asset, not raw loot: each has an owner, business definition, quality expectations, access controls, and a reusable contract.'},
   {t:'Semantic Layer', c:'BN', d:'Translates raw network telemetry into trusted business metrics: partner performance, delivery reliability, exception trends, lifecycle completion.'},
   {t:'TG Aviator', c:'BN', d:'The intelligent copilot: surfaces context, detects emerging risk, recommends next actions, and explains why an issue matters. Bounded by policy.'},
@@ -1215,8 +1227,8 @@ const PRODUCTS = [
   { key:'tgint',    name:'TRADING GRID INTEL',   tag:'TGI',   color:'#FAAD1F', max:7, blurb:'escalating business-value multiplier' },
   { key:'autoport', name:'AUTO PORTAL',          tag:'PORTAL',color:'#00B8B8', max:6, blurb:'clean-doc magnet + auto-deliver' },
   { key:'looker',   name:'LOOKER',               tag:'LOOK',  color:'#FF8C3B', max:5, blurb:'predictive high-value highlighting' },
-  { key:'bndi',     name:'DECISIONS INTEL',      tag:'BNDI',  color:'#DF1683', max:6, blurb:'auto-rejects malformed at range' },
-  { key:'dataplat', name:'DATA PLATFORM',        tag:'BNDP',  color:'#0066FF', max:7, blurb:'foundation: boosts everything + cannon' },
+  { key:'bndi',     name:'DECISIONS INTEL',      tag:'TGDI',  color:'#DF1683', max:6, blurb:'auto-rejects malformed at range' },
+  { key:'dataplat', name:'DATA PLATFORM',        tag:'TGDP',  color:'#0066FF', max:7, blurb:'foundation: boosts everything + cannon' },
   { key:'mcp',      name:'MCP TOOLS',            tag:'MCP',   color:'#B080FF', max:6, blurb:'governed turret agents, +1 per level' },
   /* Google partner tier */
   { key:'gcloud',   name:'GOOGLE CLOUD',         tag:'GCLOUD',color:'#4285F4', max:7, blurb:'cloud scale: weapon tier + damage', partner:true },
@@ -1506,7 +1518,7 @@ const keys = { L:false, R:false };
 let fireKey = false, fireBtn = false, fireTouch = false;
 let movePointer = null;
 const firePointers = new Set();
-function isFiring(){ return fireKey || fireBtn || fireTouch; }
+function isFiring(){ return fireKey || fireBtn || fireTouch || PAD.fire; }
 function stopFire(){ fireKey = fireBtn = fireTouch = false; firePointers.clear(); }
 
 function px2game(clientX){
@@ -1613,6 +1625,76 @@ el.zap.addEventListener('pointerdown', e => {
 });
 ['pointerup','pointercancel','pointerleave'].forEach(ev =>
   el.zap.addEventListener(ev, () => fireBtn = false));
+
+/* ---------- game controller: Xbox (Bluetooth or USB) and any standard-mapping pad ----------
+   left stick or d-pad: route · A, RB or RT: fire · Menu: start / hold · B: resume · View: settings
+   The browser only reveals a controller after one of its buttons is pressed on this page. */
+const PAD = { idx: null, prev: [], dir: 0, fire: false, keep: null };
+const PAD_DEAD = 0.22;
+function padHints(on){
+  const c = document.getElementById('controls'), ps = document.getElementById('pressstart');
+  document.body.classList.toggle('pad', on);
+  if (!c || !ps) return;
+  if (!PAD.keep) PAD.keep = { c: c.innerHTML, ps: ps.textContent };
+  c.innerHTML = on ? '<span><b>LS</b>route</span><span><b>A / RT</b>fire</span><span><b>menu</b>hold</span><span><b>view</b>settings</span>' : PAD.keep.c;
+  ps.textContent = on ? 'Press A to clock in' : PAD.keep.ps;
+}
+function padOn(gp){
+  if (PAD.idx !== null) return;
+  PAD.idx = gp.index; PAD.prev = gp.buttons.map(b => b.pressed);
+  padHints(true);
+  toast('CONTROLLER CONNECTED · A OR RT FIRES · MENU HOLDS', 'good', 2600);
+}
+addEventListener('gamepadconnected', e => padOn(e.gamepad));
+addEventListener('gamepaddisconnected', e => {
+  if (e.gamepad.index !== PAD.idx) return;
+  PAD.idx = null; PAD.dir = 0; PAD.fire = false; padHints(false);
+  if (state === 'play' && !paused) togglePause();     /* a dropped controller holds the shift */
+});
+function pollPad(){
+  if (!navigator.getGamepads) return;
+  let gp = null;
+  try {
+    const pads = navigator.getGamepads();
+    gp = PAD.idx !== null ? pads[PAD.idx] : null;
+    if (!gp) for (const p of pads) if (p && p.connected){ PAD.idx = null; padOn(p); gp = p; break; }
+  } catch (e) { gp = null; }
+  if (!gp){ PAD.dir = 0; PAD.fire = false; return; }
+  const now = gp.buttons.map(b => !!b && (b.pressed || b.value > 0.5));
+  const down = i => now[i] && !PAD.prev[i];
+  const ax = gp.axes[0] || 0;
+  let dir = Math.abs(ax) > PAD_DEAD ? (ax - Math.sign(ax) * PAD_DEAD) / (1 - PAD_DEAD) : 0;
+  if (now[14]) dir = -1;
+  if (now[15]) dir = 1;
+  PAD.dir = clamp(dir, -1, 1);
+  const rt = gp.buttons[7] ? gp.buttons[7].value : 0;
+  PAD.fire = state === 'play' && !paused && !settingsOpen && (now[0] || now[5] || rt > 0.3);
+  if (now.some((v, i) => v && !PAD.prev[i])) audioInit();
+  if (quizOpen){
+    if (down(2)) answerQuiz(0); else if (down(3)) answerQuiz(1); else if (down(1)) answerQuiz(2); else if (down(8)) closeQuiz();
+  } else {
+    if (down(0) || down(9)){
+      if (settingsOpen) closeSettings();
+      else if (state === 'boot') skipBoot();
+      else if (state === 'title' || state === 'over') startRun();
+      else if (state === 'play' && G.onboard && G.onboard.phase === 'approve') approveGoLive();
+      else if (state === 'play' && down(9)) togglePause();
+    }
+    if (down(1)){ if (settingsOpen) closeSettings(); else if (state === 'play' && paused) togglePause(); }
+    if (down(8)){ if (settingsOpen) closeSettings(); else if (state === 'title' || state === 'play') openSettings(); }
+  }
+  PAD.prev = now;
+}
+/* rumble on the big moments (Chrome and Edge; other browsers ignore it) */
+function rumble(ms, strong, weak){
+  if (PAD.idx === null || !navigator.getGamepads) return;
+  try {
+    const gp = navigator.getGamepads()[PAD.idx], va = gp && gp.vibrationActuator;
+    if (va && va.playEffect) { const r = va.playEffect('dual-rumble', { duration: ms, strongMagnitude: strong, weakMagnitude: weak }); if (r && r.catch) r.catch(() => {}); }
+  } catch (e) {}
+}
+[['boom', 200, .8, .5], ['bad', 180, .7, .4], ['over', 650, 1, .8], ['bossDie', 450, 1, .7], ['overheat', 280, .4, .7], ['super', 140, .2, .6]]
+  .forEach(([k, ms, st, wk]) => { const f = sfx[k]; if (typeof f === 'function') sfx[k] = function(){ rumble(ms, st, wk); return f.apply(sfx, arguments); }; });
 
 el.mute.addEventListener('click', toggleMute);
 function toggleMute(){
@@ -2067,7 +2149,7 @@ const BOOTLINES = [
   ['AS2 HANDSHAKE ................', ' VERIFIED', 'ok'],
   ['VAN INTERCONNECTS ............', ' 12/12 UP', 'ok'],
   ['TG INSIGHTS TELEMETRY ........', ' STREAMING', 'ok'],
-  ['AVIATOR COPILOT ..............', ' STANDING BY', 'ok'],
+  ['TRADING GRID AVIATOR .........', ' STANDING BY', 'ok'],
   ['VALIDATOR CANNON .............', ' ARMED', 'ok'],
   ['SUPPLIER DIRECTORY ...........', ' 8 PARTNERS SYNCED', 'ok'],
   ['DOCUMENT QUEUE ...............', ' 8,412 PENDING', 'ok'],
@@ -3952,6 +4034,7 @@ function update(dt){
   if (playing){
     P.speed = moveSpeedPx();
     let dir = (keys.R ? 1 : 0) - (keys.L ? 1 : 0);
+    if (!dir && PAD.dir) dir = PAD.dir;              /* controller: analog left stick or d-pad */
     if (G.ctrlFlipT > 0) dir = -dir;                 /* prompt injection inverts steering */
     if (dir) P.x = clamp(P.x + dir * P.speed * dt, P.w/2, W - P.w/2);
     /* router thruster trail */
@@ -5398,7 +5481,7 @@ function drawCoach(){
   ctx.fillText(sub, W / 2, H - 104);
   ctx.restore(); ctx.textAlign = 'left';
 }
-/* Data Platform (BNDP): correlate related documents across lanes into visible journeys.
+/* Trading Grid Data Platform (TGDP): correlate related documents across lanes into visible journeys.
    The network stops looking like noise and starts looking like connected business processes. */
 function drawCorrelations(){
   if (state !== 'play') return;
@@ -5697,6 +5780,7 @@ function monitorFrame(dt){
 function loop(t){
   const dt = clamp((t - last) / 1000, 0, 0.05);
   last = t;
+  pollPad();
   if (state === 'play' && !paused && !quizOpen) monitorFrame(dt);
   if (!paused && !quizOpen && state !== 'over') update(dt);
   render();

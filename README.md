@@ -10,7 +10,10 @@ Two Render services built from this repo:
 
 Master copy of the guide: the claude.ai artifact. Master copy of the game: `game/gridrunner.html` (the owner's
 GRIDRUNNERkiosk.html with invented partner names, since the guide never names clients, and a hook in `startRun()`).
-`site/` is generated from both, never edited by hand:
+`site/` is generated from both, never edited by hand. The game shows "Grid Runner, the official game of Trading Grid" above its frame at all times, uses current product
+names (Trading Grid Data Platform, Trading Grid Decisions Intelligence, Command Center Performance Monitor) and plays with
+a game controller (Gamepad API, standard mapping, such as an Xbox controller over Bluetooth or USB): left stick or d-pad
+routes, A, RB or RT fires, Menu starts and holds, B resumes, View opens settings; rumble in Chrome and Edge. Build:
 
 ```
 API_ORIGIN=https://tg-guide-stats.onrender.com node tools/build-site.mjs /path/to/master.html /path/to/image-root
