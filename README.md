@@ -13,7 +13,23 @@ GRIDRUNNERkiosk.html with invented partner names, since the guide never names cl
 `site/` is generated from both, never edited by hand. The game shows "Grid Runner, the official game of Trading Grid" above its frame at all times, uses current product
 names (Trading Grid Data Platform, Trading Grid Decisions Intelligence, Command Center Performance Monitor) and plays with
 a game controller (Gamepad API, standard mapping, such as an Xbox controller over Bluetooth or USB): left stick or d-pad
-routes, A, RB or RT fires, Menu starts and holds, B resumes, View opens settings; rumble in Chrome and Edge. Build:
+routes, A, RB or RT fires, Menu starts and holds, B resumes, View opens settings; rumble in Chrome and Edge.
+
+Kiosk behaviour (OpenText World):
+- Two-controller co-op: controller 2 presses A on the title for a co-op shift, or A mid-shift to join. Two routers
+  (P1 blue, P2 amber) defend one network: shared score, escalations, weapon and power-ups, separate validator heat,
+  about 15% more traffic. A dropped controller 2 returns the shift to solo; a dropped controller 1 holds it.
+- Idle reset and attract mode: 60 seconds with no input during a shift, on hold, in settings or on the review screen
+  returns to the title. After 15 quiet seconds there the game plays itself, alternating a solo demo from wave 1 (40 s)
+  with a co-op demo from wave 3 that reaches an incident (50 s). A, Menu, Enter, Space or a tap plays (controller 2:
+  co-op); any other input shows the title. A demo never counts as a play, never saves, never rumbles and is silent.
+- Hold menu: Esc, P or Menu during a shift (Esc or B on the title and review screens) opens Resume, Settings, End shift,
+  Innovation Guide kiosk and Exit to the Innovation Guide, each with its controller button beside its keyboard key,
+  and a controls table; the controller column shows only while a controller is connected.
+- Innovation Guide kiosk: Y or K on the title, review and hold screens (and a button on each) opens `/#conference`,
+  which starts the guide's OpenText World kiosk mode.
+
+Build:
 
 ```
 API_ORIGIN=https://tg-guide-stats.onrender.com node tools/build-site.mjs /path/to/master.html /path/to/image-root

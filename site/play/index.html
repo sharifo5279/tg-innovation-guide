@@ -247,6 +247,19 @@
   #toast.bad{color:#FF8C80;border-color:#5C221B}
   #toast.good{color:var(--teal);border-color:#0E4D4D}
   #toast.gold{color:var(--gold);border-color:#5C4310}
+  /* attract demo: the game plays itself until someone presses A, Enter or taps */
+  #demo{
+    position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);z-index:6;
+    display:flex;align-items:center;gap:14px;white-space:nowrap;pointer-events:none;
+    font-family:var(--mono);font-size:clamp(10px,1.5vw,15px);letter-spacing:.24em;text-transform:uppercase;
+    color:var(--fg);background:rgba(6,12,24,.88);border:2px solid var(--primary);border-radius:999px;
+    padding:10px 22px;box-shadow:0 0 28px rgba(0,102,255,.45);
+  }
+  #demo .dk{color:var(--primary-lightest);font-weight:700}
+  #demoline{animation:pulse 1.4s ease-in-out infinite}
+  #demo .dc{display:none;color:var(--gold);border-left:1px solid var(--line);padding-left:14px}
+  #demo.coop .dc{display:inline}
+  body.demo #mutebtn{visibility:hidden}
 
   /* game over — a fixed "performance review" dashboard that fills the 16:9 frame, no scroll.
      container-query units (cqh/cqw) scale every element to the frame so it always fits. */
@@ -297,6 +310,36 @@
   #pause .eyebrow{color:var(--fg3)}
   #pausetitle{font-weight:900;font-size:clamp(28px,5vw,48px)}
   #pauseline{margin-top:10px;color:var(--fg2);font-weight:300;font-size:14px}
+  /* hold menu: what to do next, with the controller button beside each keyboard key */
+  /* sized from the frame (container units), so the menu fits a phone in landscape as well as a kiosk screen */
+  #pause{container-type:size;padding:16px 24px}
+  #pause .eyebrow{margin-bottom:1cqh}
+  #pausetitle{font-size:clamp(20px,7cqh,48px)!important;line-height:1}
+  #pauseline{margin-top:1.2cqh!important;font-size:clamp(10px,2.2cqh,14px)!important}
+  #holdgrid{margin-top:3cqh;display:flex;gap:3.4cqw;align-items:flex-start;justify-content:center;text-align:left;width:100%;max-width:900px}
+  #holdmenu{display:flex;flex-direction:column;gap:.9cqh;flex:0 1 380px;min-width:0}
+  .hm{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;
+    font-family:var(--mono);font-size:clamp(9px,1.75cqh,12px);letter-spacing:.1em;text-transform:uppercase;color:var(--fg2);
+    background:#0D1729;border:1px solid var(--line);border-radius:10px;padding:clamp(4px,1.25cqh,9px) 12px;cursor:pointer;text-align:left}
+  .hm:hover{color:var(--fg);border-color:#33425C}
+  .hm.foc,.hm:focus-visible{color:#fff;border-color:var(--primary-lighter);box-shadow:0 0 0 2px var(--primary),0 0 16px rgba(0,102,255,.45);outline:none}
+  .hm .keys{display:flex;gap:4px;flex:none}
+  #pause kbd{font-family:var(--mono);font-size:clamp(8px,1.45cqh,10px);letter-spacing:.06em;text-transform:none;color:var(--fg);
+    border:1px solid #33425C;border-bottom-width:2px;border-radius:5px;padding:1px 6px;background:#111D33;white-space:nowrap}
+  #pause kbd.kp,#pause .kp kbd{border-color:#0E4D4D;color:var(--teal)}
+  .hmnote{margin-top:4px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg3)}
+  #keymap{border-collapse:collapse;font-size:clamp(9px,1.75cqh,12px);color:var(--fg2);flex:0 1 auto}
+  #keymap th,#keymap td{padding:clamp(2px,.75cqh,5px) 10px;border-bottom:1px solid #1A2740;text-align:left;vertical-align:middle;font-weight:400}
+  #keymap thead th{font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--fg3)}
+  #keymap tbody th{white-space:nowrap;font-family:var(--mono);font-size:clamp(8px,1.45cqh,10px);letter-spacing:.14em;text-transform:uppercase;color:var(--fg)}
+  #pause .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  /* controller keys only once a controller is connected; the keyboard keys always */
+  body:not(.pad) #pause .kp{display:none}
+  body.pad #pause .hmnote .kb{display:none}
+  #pause.menu #pauselesson,#pause.menu #pauseline{display:none}
+  #pause #pauselesson{margin-top:3cqh}
+  @container (max-height:420px){ #pause #pauselesson, #pause .hmnote{display:none} }
+  @container (max-width:560px){ #holdgrid{flex-direction:column;align-items:center} #keymap{display:none} }
 
   /* ticker */
   #ticker{
@@ -496,6 +539,7 @@
     padding:7px 14px;cursor:pointer;transition:all .12s;
   }
   .chip:hover{border-color:#33425C;color:var(--fg)}
+  a.chip{display:inline-block;text-decoration:none;line-height:normal}
   .chip.sel{color:#fff;background:var(--primary);border-color:var(--primary-lighter);box-shadow:0 0 14px rgba(0,102,255,.55)}
   .chip.sel.peakchip{background:#B11206;border-color:#FF5C4D;box-shadow:0 0 14px rgba(255,92,77,.55)}
   #diffsub{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--fg3);margin-top:7px;text-transform:uppercase;min-height:11px}
@@ -618,7 +662,7 @@
 
   @media (prefers-reduced-motion: reduce){
     #scan{display:none}
-    #pressstart,#tickerdot{animation:none}
+    #pressstart,#tickerdot,#demoline{animation:none}
   }
 </style>
 <script>/* count one Grid Runner run: no cookies, see /stats/ */window.grPlayed=function(){try{if(navigator.webdriver||location.protocol!=="https:")return;var u="https://tg-guide-stats.onrender.com/api/play",b=new Blob(["{}"],{type:"text/plain"});if(!(navigator.sendBeacon&&navigator.sendBeacon(u,b)))fetch(u,{method:"POST",body:"{}",keepalive:true,mode:"no-cors"});}catch(e){}};</script></head>
@@ -659,6 +703,7 @@
     <div id="chainhud"></div>
     <div id="banner"></div>
     <div id="toast"></div>
+    <div id="demo" class="hidden"><span class="dk">Grid Runner demo</span><span id="demoline">Press Enter to play</span><span class="dc">Two controllers? Play co-op</span></div>
 
     <div id="boot" class="overlay">
       <div id="bootlines"><span id="bootcursor"></span></div>
@@ -674,9 +719,12 @@
         <span><b>hold space</b>fire</span>
         <span><b>p</b>hold</span>
         <span><b>s</b>settings</span>
+        <span><b>k</b>guide kiosk</span>
+        <span><b>esc</b>menu</span>
       </div>
       <div id="titlebtns">
         <button class="chip" data-open="settings">Settings</button>
+        <a class="chip kioskbtn" href="/#conference" title="Open the Innovation Guide in OpenText World kiosk mode">Innovation Guide kiosk <span class="kk">(K)</span></a>
       </div>
       <div id="learnhint">Catch clean docs, reject the failures, bring partners <b>live</b>, and deploy <b>agents</b> until the network runs itself. Grab gold <b>INTEL</b> packets to learn the trade.</div>
       <div id="titlediff"></div>
@@ -702,14 +750,35 @@
       <div id="statgrid"></div>
       <div id="overfoot">
         <div id="debriefwrap"><span id="debrieflabel">Shift debrief</span> <span id="debrief"></span></div>
-        <div id="overbtns"><button class="chip" id="againbtn">Run it back (Enter)</button></div>
+        <div id="overbtns"><button class="chip" id="againbtn">Run it back (Enter)</button><a class="chip kioskbtn" href="/#conference">Innovation Guide kiosk <span class="kk">(K)</span></a></div>
       </div>
     </div>
 
     <div id="pause" class="overlay hidden">
-      <div class="eyebrow">Command Center</div>
+      <div class="eyebrow" id="pauseeyebrow">Command Center</div>
       <div id="pausetitle">ON HOLD</div>
-      <div id="pauseline">Your queue is safe. Nothing moves until you do. Press P to resume, S for settings.</div>
+      <div id="pauseline">Your queue is safe. Nothing moves until you do.</div>
+      <div id="holdgrid">
+        <div id="holdmenu" role="menu" aria-label="Grid Runner menu">
+          <button type="button" class="hm" role="menuitem" data-act="resume"><span class="hl">Resume shift</span><span class="keys"><kbd class="kp">B</kbd><kbd class="kp">Menu</kbd><kbd>Esc</kbd><kbd>P</kbd></span></button>
+          <button type="button" class="hm" role="menuitem" data-act="settings"><span class="hl">Settings</span><span class="keys"><kbd class="kp">View</kbd><kbd>S</kbd></span></button>
+          <button type="button" class="hm" role="menuitem" data-act="end"><span class="hl">End shift, back to the title</span><span class="keys"><kbd class="kp">X</kbd><kbd>Q</kbd></span></button>
+          <button type="button" class="hm" role="menuitem" data-act="kiosk"><span class="hl">Innovation Guide kiosk</span><span class="keys"><kbd class="kp">Y</kbd><kbd>K</kbd></span></button>
+          <button type="button" class="hm" role="menuitem" data-act="exit"><span class="hl">Exit to the Innovation Guide</span><span class="keys"><kbd>E</kbd></span></button>
+          <div class="hmnote"><span class="kp">D-pad or stick to move, A to choose</span><span class="kb">Arrow keys to move, Enter to choose</span></div>
+        </div>
+        <table id="keymap" aria-label="Controls">
+          <thead><tr><th scope="col"><span class="sr">Action</span></th><th scope="col" class="kp">Controller</th><th scope="col">Keyboard</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Route</th><td class="kp"><kbd>Left stick</kbd> <kbd>D-pad</kbd></td><td><kbd>&larr;</kbd> <kbd>&rarr;</kbd> or <kbd>A</kbd> <kbd>D</kbd></td></tr>
+            <tr><th scope="row">Fire</th><td class="kp"><kbd>A</kbd> <kbd>RB</kbd> <kbd>RT</kbd></td><td>hold <kbd>Space</kbd></td></tr>
+            <tr><th scope="row">Hold</th><td class="kp"><kbd>Menu</kbd></td><td><kbd>Esc</kbd> <kbd>P</kbd></td></tr>
+            <tr><th scope="row">Go-live</th><td class="kp"><kbd>A</kbd></td><td><kbd>Enter</kbd></td></tr>
+            <tr><th scope="row">Co-op</th><td class="kp"><kbd>A</kbd> on controller 2</td><td>controllers only</td></tr>
+            <tr><th scope="row">Sound</th><td class="kp">in Settings</td><td><kbd>M</kbd></td></tr>
+          </tbody>
+        </table>
+      </div>
       <div id="pauselesson"></div>
     </div>
 
@@ -1313,7 +1382,7 @@ const $ = id => document.getElementById(id);
 const cvs = $('game');
 let ctx = cvs.getContext('2d');    /* let: temporarily swapped while baking sprites offscreen */
 const el = {
-  hud:$('hud'), score:$('score'), mult:$('mult'), wavename:$('wavename'), slam:$('slam'),
+  hud:$('hud'), demo:$('demo'), score:$('score'), mult:$('mult'), wavename:$('wavename'), slam:$('slam'),
   heatbar:$('heatbar'), wpnrow:$('wpnrow'), wpntag:$('wpntag'), fx:$('fx'), chainhud:$('chainhud'),
   availbar:$('availbar'), tputbar:$('tputbar'), availpct:$('availpct'), tputpct:$('tputpct'), pobar:$('pobar'), popct:$('popct'), resilbar:$('resilbar'), resilpct:$('resilpct'), optier:$('optier'),
   settings:$('settings'), gamespeedchips:$('gamespeedchips'), movespeedchips:$('movespeedchips'),
@@ -1374,7 +1443,7 @@ let ambTick = 0;
 /* the pad grows in presence + brightness with Network Resilience; tightens during incidents */
 function updateAmbient(){
   if (!AC || !ambGain) return;
-  const on = !muted && state === 'play';
+  const on = !muted && state === 'play' && !demo;
   const rez = (G.resil || 0) / 100;
   const target = on ? (0.009 + rez * 0.028) : 0.0001;
   const cut = on ? (240 + rez * 900 + (G.boss ? 280 : 0)) : 240;
@@ -1388,7 +1457,7 @@ function updateAmbient(){
 ['touchend', 'touchstart', 'pointerdown'].forEach(ev =>
   window.addEventListener(ev, function unlock(){ audioInit(); }, { once: false, passive: true }));
 function tone(f0, f1, dur, type='square', vol=1, delay=0){
-  if (!AC || muted) return;
+  if (!AC || muted || demo) return;   /* the attract demo stays silent */
   const t = AC.currentTime + delay;
   const o = AC.createOscillator(), g = AC.createGain();
   o.type = type;
@@ -1510,15 +1579,37 @@ function resetRun(){
 }
 resetRun();
 
-/* player */
-const P = { x: W/2, w: 148, h: 26, speed: 640, cool: 0 };
+/* routers · P1 is the keyboard, touch and the first controller; P2 is the second controller (co-op).
+   Score, escalations, weapon level and product power-ups are shared: two routers, one network.
+   Each router has its own validator heat. P points at P1 except while a P2 step runs inside asP2(). */
+const P1 = { x: W/2, w: 148, h: 26, speed: 640, cool: 0, id: 1, on: true,
+  col: { bar:'#0066FF', barrel:'#3385FF', glow:'rgba(0,102,255,0.9)', glowB:'rgba(51,133,255,0.9)', bracket:'rgba(102,163,255,0.8)', trail:'#4EA8FF', tag:'#9FC4FF' } };
+const P2 = { x: W*0.64, w: 148, h: 26, speed: 640, cool: 0, id: 2, on: false, heat: 0, hot: false, fireT: 0,
+  col: { bar:'#E8930C', barrel:'#FAAD1F', glow:'rgba(250,173,31,0.9)', glowB:'rgba(250,173,31,0.9)', bracket:'rgba(250,200,110,0.85)', trail:'#FAC35A', tag:'#FAD98F' } };
+let P = P1;
+let coopNext = false;          /* "run it back" after a co-op shift keeps both routers */
+function routers(){ return P2.on ? [P1, P2] : [P1]; }
+function nearestRouter(x){ return (P2.on && Math.abs(x - P2.x) < Math.abs(x - P1.x)) ? P2 : P1; }
+/* run fn as player 2: P, heat, overheat and fire cooldown become P2's for the duration */
+function asP2(fn){
+  if (P !== P1) return fn();
+  const h = G.heat, hot = G.hot, ft = G.fireT;
+  P = P2; G.heat = P2.heat; G.hot = P2.hot; G.fireT = P2.fireT;
+  try { return fn(); }
+  finally { P2.heat = G.heat; P2.hot = G.hot; P2.fireT = G.fireT; P = P1; G.heat = h; G.hot = hot; G.fireT = ft; }
+}
+function asRouter(r, fn){ return r === P2 ? asP2(fn) : fn(); }
+function placeRouters(coop){
+  P1.x = coop ? W * 0.36 : W / 2;
+  P2.on = !!coop; P2.x = W * 0.64; P2.heat = 0; P2.hot = false; P2.fireT = 0;
+}
 
 /* ---------- input ---------- */
 const keys = { L:false, R:false };
 let fireKey = false, fireBtn = false, fireTouch = false;
 let movePointer = null;
 const firePointers = new Set();
-function isFiring(){ return fireKey || fireBtn || fireTouch || PAD.fire; }
+function isFiring(){ return demo ? AUTO[0].fire : (fireKey || fireBtn || fireTouch || PAD.fire); }
 function stopFire(){ fireKey = fireBtn = fireTouch = false; firePointers.clear(); }
 
 function px2game(clientX){
@@ -1527,9 +1618,16 @@ function px2game(clientX){
 }
 
 addEventListener('keydown', e => {
+  markInput();
   if (e.repeat) return;
   /* typing in the leaderboard name field: let the input own the keys */
   if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+  /* attract mode: Enter or Space plays, any other key shows the title */
+  if (demo){
+    if (e.key === ' ' || e.key === 'Enter') e.preventDefault();
+    endDemo(e.key === ' ' || e.key === 'Enter' ? 'start' : 'title');
+    return;
+  }
   if (quizOpen){
     if (e.key === 'Escape') closeQuiz();
     else if (/^[1-3]$/.test(e.key)) answerQuiz(Number(e.key) - 1);
@@ -1537,6 +1635,12 @@ addEventListener('keydown', e => {
     return;
   }
   const k = e.key;
+  if (menuOpen && !settingsOpen){
+    if (k === ' ' || k === 'Enter' || k === 'ArrowUp' || k === 'ArrowDown') e.preventDefault();
+    if (menuKey(k)) return;
+    if (k === 'm' || k === 'M') toggleMute();
+    return;
+  }
   if (k === 'ArrowLeft' || k === 'a' || k === 'A') keys.L = true;
   if (k === 'ArrowRight'|| k === 'd' || k === 'D') keys.R = true;
   const panelUp = settingsOpen;
@@ -1558,6 +1662,7 @@ addEventListener('keydown', e => {
   if (k === 'Escape'){
     if (settingsOpen) closeSettings();
     else if (state === 'play') togglePause();
+    else if (state === 'title' || state === 'over') openMenu();
   }
   if ((k === 'p' || k === 'P') && state === 'play' && !panelUp) togglePause();
   if (k === 's' || k === 'S'){
@@ -1565,6 +1670,7 @@ addEventListener('keydown', e => {
     else if (state === 'title' || state === 'play') openSettings();
   }
   if (k === 'm' || k === 'M') toggleMute();
+  if ((k === 'k' || k === 'K') && !settingsOpen && (state === 'title' || state === 'over')) goKiosk();
   if (state === 'title' && /^[0-9]$/.test(k)){
     ackBuffer = (ackBuffer + k).slice(-3);
     if (ackBuffer === '997' && !ackBonus){
@@ -1585,6 +1691,7 @@ addEventListener('blur', () => { keys.L = keys.R = false; stopFire(); });
 /* first finger steers, any extra finger fires */
 cvs.addEventListener('pointerdown', e => {
   audioInit();
+  if (demo){ endDemo('start'); return; }     /* tap the attract demo to play */
   if (state !== 'play' || paused) return;
   /* go-live approval: a deliberate tap confirms (Enter / Start does too) */
   if (G.onboard && G.onboard.phase === 'approve'){ approveGoLive(); return; }
@@ -1596,7 +1703,9 @@ cvs.addEventListener('pointerdown', e => {
     fireTouch = true;
   }
 });
+addEventListener('pointerdown', () => markInput(), true);
 addEventListener('pointermove', e => {
+  if (e.pointerId === movePointer) markInput();
   if (e.pointerId === movePointer && state === 'play' && !paused){
     P.x = clamp(px2game(e.clientX), P.w/2, W - P.w/2);
   }
@@ -1626,75 +1735,298 @@ el.zap.addEventListener('pointerdown', e => {
 ['pointerup','pointercancel','pointerleave'].forEach(ev =>
   el.zap.addEventListener(ev, () => fireBtn = false));
 
-/* ---------- game controller: Xbox (Bluetooth or USB) and any standard-mapping pad ----------
+/* ---------- game controllers: Xbox (Bluetooth or USB) and any standard-mapping pad ----------
    left stick or d-pad: route · A, RB or RT: fire · Menu: start / hold · B: resume · View: settings
-   The browser only reveals a controller after one of its buttons is pressed on this page. */
-const PAD = { idx: null, prev: [], dir: 0, fire: false, keep: null };
+   The first controller drives player 1. A second controller plays co-op as player 2: A or Menu on the
+   title starts a co-op shift, and A mid-shift joins the one under way. The browser only reveals a
+   controller after one of its buttons is pressed on this page. */
+const mkPad = () => ({ idx: null, prev: [], dir: 0, fire: false, ay: 0 });
+const PADS = [mkPad(), mkPad()];
+const PAD = PADS[0];
 const PAD_DEAD = 0.22;
-function padHints(on){
+let padKeep = null;
+let KILLER = 0;                 /* which router's validator landed the current hit (for rumble) */
+function padCount(){ return PADS.filter(p => p.idx !== null).length; }
+function padSlotOf(index){ return PADS[0].idx === index ? 0 : (PADS[1].idx === index ? 1 : -1); }
+function padHints(){
+  const n = padCount(), on = n > 0;
   const c = document.getElementById('controls'), ps = document.getElementById('pressstart');
   document.body.classList.toggle('pad', on);
+  const bp = document.querySelector('#brandbar .pad');
+  if (bp) bp.textContent = n > 1 ? '2 controllers connected' : 'Controller connected';
+  refreshDemoLine();
   if (!c || !ps) return;
-  if (!PAD.keep) PAD.keep = { c: c.innerHTML, ps: ps.textContent };
-  c.innerHTML = on ? '<span><b>LS</b>route</span><span><b>A / RT</b>fire</span><span><b>menu</b>hold</span><span><b>view</b>settings</span>' : PAD.keep.c;
-  ps.textContent = on ? 'Press A to clock in' : PAD.keep.ps;
+  if (!padKeep) padKeep = { c: c.innerHTML, ps: ps.textContent };
+  c.innerHTML = on ? '<span><b>LS</b>route</span><span><b>A / RT</b>fire</span><span><b>menu</b>hold</span><span><b>view</b>settings</span>' +
+    (n > 1 ? '<span><b>controller 2 &middot; A</b>co-op</span>' : '') + '<span><b>Y</b>guide kiosk</span><span><b>B</b>menu</span>' : padKeep.c;
+  ps.textContent = on ? (n > 1 ? 'Press A to clock in · A on controller 2 for co-op' : 'Press A to clock in') : padKeep.ps;
+  document.querySelectorAll('.kioskbtn .kk').forEach(k => { k.textContent = on ? '(Y)' : '(K)'; });
+  el.againbtn.textContent = on ? 'Run it back (A)' : 'Run it back (Enter)';
+}
+/* back to the Innovation Guide, straight into its OpenText World kiosk mode (the guide opens it from #conference) */
+function goKiosk(){
+  if (demo) return;
+  stopFire();
+  try { sfx.ui(); } catch (e) {}
+  location.href = '/#conference';
+}
+function goGuide(){
+  if (demo) return;
+  stopFire();
+  location.href = '/';
 }
 function padOn(gp){
-  if (PAD.idx !== null) return;
-  PAD.idx = gp.index; PAD.prev = gp.buttons.map(b => b.pressed);
-  padHints(true);
-  toast('CONTROLLER CONNECTED · A OR RT FIRES · MENU HOLDS', 'good', 2600);
+  if (!gp || padSlotOf(gp.index) >= 0) return;
+  const s = PADS[0].idx === null ? 0 : (PADS[1].idx === null ? 1 : -1);
+  if (s < 0) return;
+  PADS[s].idx = gp.index;
+  PADS[s].prev = gp.buttons.map(b => !!b && (b.pressed || b.value > 0.5));
+  padHints();
+  toast(s === 0 ? 'CONTROLLER CONNECTED · A OR RT FIRES · MENU HOLDS' : 'CONTROLLER 2 READY · PRESS A TO PLAY CO-OP', 'good', 2600);
 }
-addEventListener('gamepadconnected', e => padOn(e.gamepad));
+addEventListener('gamepadconnected', e => { markInput(); padOn(e.gamepad); });
 addEventListener('gamepaddisconnected', e => {
-  if (e.gamepad.index !== PAD.idx) return;
-  PAD.idx = null; PAD.dir = 0; PAD.fire = false; padHints(false);
-  if (state === 'play' && !paused) togglePause();     /* a dropped controller holds the shift */
+  const s = padSlotOf(e.gamepad.index);
+  if (s < 0) return;
+  Object.assign(PADS[s], mkPad());
+  padHints();
+  if (s === 1){
+    coopNext = false;
+    if (P2.on && state === 'play' && !demo){ P2.on = false; toast('CONTROLLER 2 DISCONNECTED · SOLO SHIFT', 'bad', 2600); }
+    return;
+  }
+  if (state === 'play' && !paused && !demo) togglePause();     /* a dropped controller holds the shift */
 });
-function pollPad(){
-  if (!navigator.getGamepads) return;
-  let gp = null;
-  try {
-    const pads = navigator.getGamepads();
-    gp = PAD.idx !== null ? pads[PAD.idx] : null;
-    if (!gp) for (const p of pads) if (p && p.connected){ PAD.idx = null; padOn(p); gp = p; break; }
-  } catch (e) { gp = null; }
-  if (!gp){ PAD.dir = 0; PAD.fire = false; return; }
+function readPad(pd, gp){
   const now = gp.buttons.map(b => !!b && (b.pressed || b.value > 0.5));
-  const down = i => now[i] && !PAD.prev[i];
   const ax = gp.axes[0] || 0;
   let dir = Math.abs(ax) > PAD_DEAD ? (ax - Math.sign(ax) * PAD_DEAD) / (1 - PAD_DEAD) : 0;
   if (now[14]) dir = -1;
   if (now[15]) dir = 1;
-  PAD.dir = clamp(dir, -1, 1);
   const rt = gp.buttons[7] ? gp.buttons[7].value : 0;
-  PAD.fire = state === 'play' && !paused && !settingsOpen && (now[0] || now[5] || rt > 0.3);
-  if (now.some((v, i) => v && !PAD.prev[i])) audioInit();
-  if (quizOpen){
-    if (down(2)) answerQuiz(0); else if (down(3)) answerQuiz(1); else if (down(1)) answerQuiz(2); else if (down(8)) closeQuiz();
-  } else {
-    if (down(0) || down(9)){
-      if (settingsOpen) closeSettings();
-      else if (state === 'boot') skipBoot();
-      else if (state === 'title' || state === 'over') startRun();
-      else if (state === 'play' && G.onboard && G.onboard.phase === 'approve') approveGoLive();
-      else if (state === 'play' && down(9)) togglePause();
-    }
-    if (down(1)){ if (settingsOpen) closeSettings(); else if (state === 'play' && paused) togglePause(); }
-    if (down(8)){ if (settingsOpen) closeSettings(); else if (state === 'title' || state === 'play') openSettings(); }
+  return { now, dir: clamp(dir, -1, 1), ay: gp.axes[1] || 0, trig: now[0] || now[5] || rt > 0.3,
+    down: i => !!now[i] && !pd.prev[i], anyDown: now.some((v, i) => v && !pd.prev[i]) };
+}
+function pollPad(){
+  if (!navigator.getGamepads) return;
+  let pads = [];
+  try { pads = navigator.getGamepads() || []; } catch (e) { pads = []; }
+  /* a slot whose controller went away frees up; any other connected controller fills the first free slot */
+  for (const pd of PADS){ if (pd.idx !== null && !(pads[pd.idx] && pads[pd.idx].connected)){ Object.assign(pd, mkPad()); padHints(); } }
+  for (const p of pads){ if (p && p.connected && padSlotOf(p.index) < 0) padOn(p); }
+  const R = PADS.map(pd => { const gp = pd.idx !== null ? pads[pd.idx] : null; return gp ? readPad(pd, gp) : null; });
+  if (R.some(r => r && (r.now.some(v => v) || r.dir !== 0))) markInput();   /* held buttons and a deflected stick count as play */
+  if (R.some(r => r && r.anyDown)) audioInit();
+  /* attract demo: A or Menu plays (controller 2: a co-op shift), anything else shows the title */
+  if (demo){
+    let act = null;
+    R.forEach((r, s) => {
+      if (!r) return;
+      if (r.down(0) || r.down(9)) act = act && act !== 'title' ? act : 'start' + s;
+      else if (!act && (r.anyDown || Math.abs(r.dir) > 0.5)) act = 'title';
+    });
+    R.forEach((r, s) => { if (r) PADS[s].prev = r.now; PADS[s].dir = 0; PADS[s].fire = false; });
+    if (act) endDemo(act === 'title' ? 'title' : 'start', act === 'start1');
+    return;
   }
-  PAD.prev = now;
+  const live = state === 'play' && !paused && !settingsOpen;
+  R.forEach((r, s) => {
+    const pd = PADS[s];
+    if (!r){ pd.dir = 0; pd.fire = false; return; }
+    pd.dir = r.dir;
+    pd.fire = live && r.trig;
+    const down = r.down;
+    if (menuOpen && !settingsOpen){
+      /* hold menu: d-pad or stick to move, A to choose, B or Menu to resume, X end shift, Y kiosk, View settings */
+      const was = pd.ay, y = r.ay < -0.6 ? -1 : (r.ay > 0.6 ? 1 : 0);
+      pd.ay = y;
+      if (down(12) || (y === -1 && was !== -1)){ menuFocus(menuIdx - 1); sfx.ui(); }
+      else if (down(13) || (y === 1 && was !== 1)){ menuFocus(menuIdx + 1); sfx.ui(); }
+      else if (down(0)){ const it = menuItems()[menuIdx]; if (it) menuAct(it.getAttribute('data-act')); }
+      else if (down(1) || down(9)) closeMenu();
+      else if (down(2) && state === 'play') menuAct('end');
+      else if (down(3)) goKiosk();
+      else if (down(8)) openSettings();
+    } else if (quizOpen){
+      if (down(2)) answerQuiz(0); else if (down(3)) answerQuiz(1); else if (down(1)) answerQuiz(2); else if (down(8)) closeQuiz();
+    } else {
+      if (down(0) || down(9)){
+        if (settingsOpen) closeSettings();
+        else if (state === 'boot') skipBoot();
+        else if (state === 'title') startRun(s === 1);
+        else if (state === 'over') startRun(s === 1 || coopNext);
+        else if (state === 'play' && s === 1 && !P2.on && !paused) joinP2();
+        else if (state === 'play' && G.onboard && G.onboard.phase === 'approve') approveGoLive();
+        else if (state === 'play' && down(9)) togglePause();
+      }
+      if (down(1)){ if (settingsOpen) closeSettings(); else if (state === 'play' && paused) togglePause(); else if (state === 'title' || state === 'over') openMenu(); }
+      if (down(3) && !settingsOpen && (state === 'title' || state === 'over')) goKiosk();
+      if (down(8)){ if (settingsOpen) closeSettings(); else if (state === 'title' || state === 'play') openSettings(); }
+    }
+    pd.prev = r.now;
+  });
 }
-/* rumble on the big moments (Chrome and Edge; other browsers ignore it) */
-function rumble(ms, strong, weak){
-  if (PAD.idx === null || !navigator.getGamepads) return;
-  try {
-    const gp = navigator.getGamepads()[PAD.idx], va = gp && gp.vibrationActuator;
-    if (va && va.playEffect) { const r = va.playEffect('dual-rumble', { duration: ms, strongMagnitude: strong, weakMagnitude: weak }); if (r && r.catch) r.catch(() => {}); }
-  } catch (e) {}
+/* player 2 joins a shift already under way, on the side away from player 1 */
+function joinP2(){
+  if (P2.on || state !== 'play' || demo) return;
+  P2.on = true; coopNext = true;
+  P2.x = P1.x < W / 2 ? W * 0.7 : W * 0.3; P2.heat = 0; P2.hot = false; P2.fireT = 0.25;
+  banner('PLAYER 2 JOINED');
+  toast('CO-OP SHIFT · TWO ROUTERS DEFEND ONE NETWORK', 'good', 2600);
+  sfx.power();
+  rumble(160, .3, .6, 1);
 }
+/* rumble on the big moments (Chrome and Edge; other browsers ignore it). Shared moments shake both
+   controllers; a kill, an overheat or a superpower shakes the controller of the router involved. */
+function rumble(ms, strong, weak, only){
+  if (demo || !navigator.getGamepads) return;
+  let pads; try { pads = navigator.getGamepads(); } catch (e) { return; }
+  PADS.forEach((pd, s) => {
+    if (pd.idx === null || (only !== undefined && only !== s) || (s === 1 && !P2.on)) return;
+    try {
+      const gp = pads[pd.idx], va = gp && gp.vibrationActuator;
+      if (va && va.playEffect){ const r = va.playEffect('dual-rumble', { duration: ms, strongMagnitude: strong, weakMagnitude: weak }); if (r && r.catch) r.catch(() => {}); }
+    } catch (e) {}
+  });
+}
+const RUMBLE_WHO = { boom: () => KILLER === 2 ? 1 : 0, overheat: () => P === P2 ? 1 : 0, super: () => P === P2 ? 1 : 0 };
 [['boom', 200, .8, .5], ['bad', 180, .7, .4], ['over', 650, 1, .8], ['bossDie', 450, 1, .7], ['overheat', 280, .4, .7], ['super', 140, .2, .6]]
-  .forEach(([k, ms, st, wk]) => { const f = sfx[k]; if (typeof f === 'function') sfx[k] = function(){ rumble(ms, st, wk); return f.apply(sfx, arguments); }; });
+  .forEach(([k, ms, st, wk]) => { const f = sfx[k]; if (typeof f === 'function') sfx[k] = function(){ rumble(ms, st, wk, RUMBLE_WHO[k] ? RUMBLE_WHO[k]() : undefined); return f.apply(sfx, arguments); }; });
+
+/* ---------- attract mode + idle reset (built for the OpenText World kiosk) ----------
+   60 seconds with no input during a shift, on hold, in settings or on the review screen: back to the
+   title, so the next visitor starts fresh. 15 quiet seconds on the title: the game plays itself, taking
+   turns between a solo shift from the first wave (the coach explains the rules) and a co-op shift that
+   opens on wave 3 and reaches an incident. A, Menu, Enter, Space or a tap plays; any other input shows
+   the title. A demo never counts as a play, never saves, never rumbles a controller and stays silent. */
+const IDLE_RESET = 60, TITLE_TO_DEMO = 15;
+let lastInput = performance.now(), titleT = 0;
+let demo = false, demoT = 0, demoLen = 40, demoN = 0, demoSnap = null;
+const AUTO = [{ dir: 0, fire: false, tgt: null }, { dir: 0, fire: false, tgt: null }];
+function markInput(){ lastInput = performance.now(); }
+function demoLine(){
+  if (padCount() > 0) return 'Press A to play';
+  return document.body.classList.contains('touch') ? 'Tap to play' : 'Press Enter to play';
+}
+function refreshDemoLine(){ const d = document.getElementById('demoline'); if (d) d.textContent = demoLine(); }
+function startDemo(){
+  demoSnap = { life: JSON.stringify(LIFE), seen: [...seenTypes], edi: [...seenEdifact] };
+  demoN++;
+  const coop = demoN % 2 === 0;
+  resetRun();
+  demo = true; demoT = 0; demoLen = coop ? 50 : 40;
+  state = 'play'; paused = false;
+  stopFire(); keys.L = keys.R = false; movePointer = null;
+  AUTO.forEach(a => { a.dir = 0; a.fire = false; a.tgt = null; });
+  placeRouters(coop);
+  if (coop){ G.wave = 2; G.plvl.dataplat = 2; deriveEffects(); }
+  el.title.classList.add('hidden'); el.over.classList.add('hidden'); el.pause.classList.add('hidden');
+  el.hud.classList.add('on');
+  document.body.classList.add('demo');
+  el.demo.classList.toggle('coop', coop);
+  refreshDemoLine();
+  el.demo.classList.remove('hidden');
+  renderLives(); updateHud();
+  announceWave(G.wave);
+}
+function endDemo(mode, coop){
+  if (!demo) return;
+  demo = false;
+  if (demoSnap){
+    const l = JSON.parse(demoSnap.life);
+    Object.keys(LIFE).forEach(k => { delete LIFE[k]; });
+    Object.assign(LIFE, l);
+    seenTypes.clear(); demoSnap.seen.forEach(t => seenTypes.add(t));
+    seenEdifact.clear(); demoSnap.edi.forEach(t => seenEdifact.add(t));
+    demoSnap = null;
+  }
+  document.body.classList.remove('demo');
+  el.demo.classList.add('hidden');
+  stopFire(); P2.on = false;
+  AUTO.forEach(a => { a.dir = 0; a.fire = false; a.tgt = null; });
+  markInput();
+  if (mode === 'start') startRun(!!coop); else showTitle();
+}
+function idleReset(){
+  if (quizOpen) closeQuiz();
+  if (settingsOpen) closeSettings();
+  if (paused){ paused = false; pauseFromSettings = false; el.pause.classList.add('hidden'); }
+  stopFire(); keys.L = keys.R = false; movePointer = null;
+  showTitle();
+}
+function attractTick(dt){
+  if (keys.L || keys.R || fireKey || fireBtn || fireTouch || movePointer !== null) markInput();
+  if (demo){
+    demoT += dt;
+    /* the demo approves a partner go-live the way a player would */
+    const o = G.onboard;
+    if (o && o.phase === 'approve'){ o._demoT = (o._demoT || 0) + dt; if (o._demoT > 1.4) approveGoLive(); }
+    if (demoT >= demoLen) endDemo('title');
+    return;
+  }
+  const idle = (performance.now() - lastInput) / 1000;
+  if (state === 'title' || state === 'over'){
+    if (settingsOpen || menuOpen){ if (idle >= IDLE_RESET){ if (settingsOpen) closeSettings(); closeMenu(); if (state === 'over') showTitle(); } return; }
+  }
+  if (state === 'title'){
+    titleT += dt;
+    if (titleT >= TITLE_TO_DEMO && idle >= TITLE_TO_DEMO && !document.hidden) startDemo();
+  } else if ((state === 'play' || state === 'over') && idle >= IDLE_RESET){
+    idleReset();
+  }
+}
+/* demo autopilot: catch what it can reach in time, never park under a malformed doc that is about to
+   land, line up under threats and fire while the validator has headroom. In co-op each router keeps
+   to its own half and skips the doc the other one is going for. */
+function autoPilot(r, A, claimed){
+  const pace = Math.max(0.2, (G.D ? G.D.spd : 1) * (G.timeScale || 1));
+  const eta = o => (PLAYER_Y - o.y) / Math.max(40, (o.vy || 120) * pace);
+  const home = !P2.on ? W / 2 : (r === P1 ? W * 0.33 : W * 0.67);
+  let best = null, bestV = -1e9;
+  const consider = (o, base, half) => {
+    const t = eta(o);
+    if (t < 0.04 || t > 3.4) return;
+    if (Math.max(0, Math.abs(o.x - r.x) - half) / r.speed > t) return;
+    const v = base - t * 0.45 - (P2.on ? Math.abs(o.x - home) / W * 0.9 : 0);
+    if (v > bestV){ bestV = v; best = o; }
+  };
+  for (const d of G.docs){
+    if (d.dead || d === claimed || d.bad || d.env || (d.myst && !d.resolved)) continue;
+    consider(d, (d.intel || d.comp) ? 3 : (d.exp ? 2 : 1), Math.max(0, (d.w + r.w) / 2 - 24));
+  }
+  for (const p of G.pups){ if (!p.dead && p !== claimed) consider(p, 4, r.w / 2); }
+  let tx = best ? best.x : home;
+  if (!best){
+    let th = null, tb = 1e9;
+    for (const d of G.docs){
+      if (d.dead || !d.bad || d.y > PLAYER_Y - 120) continue;
+      const s = Math.abs(d.x - r.x) + (PLAYER_Y - d.y) * 0.3 + (P2.on ? Math.abs(d.x - home) * 0.5 : 0);
+      if (s < tb){ tb = s; th = d; }
+    }
+    if (th) tx = th.x; else if (G.boss) tx = G.boss.x;
+  }
+  for (const d of G.docs){
+    if (d.dead || !d.bad || d.env) continue;
+    const t = eta(d);
+    if (t < -0.1 || t > 0.9) continue;
+    const gap = (d.w + r.w) / 2 + 6;
+    if (Math.abs(d.x - tx) < gap) tx = d.x + (tx >= d.x ? gap : -gap);
+    if (t < 0.45 && Math.abs(d.x - r.x) < gap) tx = d.x + (r.x >= d.x ? gap + 30 : -gap - 30);
+  }
+  tx = clamp(tx, r.w / 2, W - r.w / 2);
+  const dx = tx - r.x;
+  let dir = Math.abs(dx) < 5 ? 0 : clamp(dx / 70, -1, 1);
+  if (G.ctrlFlipT > 0) dir = -dir;           /* inverted controls: the demo steers through them */
+  A.dir = dir; A.tgt = best;
+  const heat = r === P2 ? r.heat : G.heat, hot = r === P2 ? r.hot : G.hot;
+  let shoot = false;
+  for (const d of G.docs){
+    if (d.dead || !d.bad || d.y > PLAYER_Y - 30 || d.y < HORIZON) continue;
+    if (Math.abs(d.x - r.x) < d.w / 2 + 26){ shoot = true; break; }
+  }
+  if (!shoot && G.boss && G.boss.y > 0 && Math.abs(G.boss.x - r.x) < G.boss.w / 2) shoot = true;
+  A.fire = shoot && !hot && heat < 80;
+}
 
 el.mute.addEventListener('click', toggleMute);
 function toggleMute(){
@@ -1768,6 +2100,7 @@ function closeSettings(){
   refreshTitleDiff();
   if (typeof saveLocal === 'function') saveLocal();
   sfx.ui();
+  if (menuOpen) menuFocus(menuIdx);
 }
 function refreshTitleDiff(){
   el.titlediff.innerHTML = 'GAME <b>' + GAME_SPEEDS[SETTINGS.gameSpeed].name + '</b> · ROUTER <b>' + MOVE_SPEEDS[SETTINGS.moveSpeed].name + '</b>';
@@ -1807,6 +2140,7 @@ function fmtN(n){ return (n == null ? 0 : n).toLocaleString('en-US'); }
 const LIFE = { runs:0, delivered:0, shot:0, bosses:0, bestWave:0, quizRight:0, quizAsked:0 };
 let QUIZSTATS = {};
 function saveLocal(){
+  if (demo) return;          /* nothing the demo does is kept */
   lsSet('gr_settings', JSON.stringify({ gameSpeed:SETTINGS.gameSpeed, moveSpeed:SETTINGS.moveSpeed, shake:SETTINGS.shake, scan:SETTINGS.scan, muted }));
   lsSet('gr_best', String(hiScore));
   lsSet('gr_seen', JSON.stringify([...seenTypes]));
@@ -1982,6 +2316,7 @@ function closeQuiz(){
 function maybeQuiz(newWave){ /* intentionally disabled */ }
 
 document.addEventListener('visibilitychange', () => {
+  if (document.hidden && demo){ endDemo('title'); return; }
   if (document.hidden && state === 'play' && !paused) togglePause();
 });
 
@@ -2188,14 +2523,22 @@ function showTitle(){
   el.title.classList.remove('hidden');
   el.hud.classList.remove('on');
   el.chainhud.classList.remove('on');
+  el.pause.classList.add('hidden'); menuOpen = false; paused = false;
   refreshTitleDiff();
   resetRun();               // ambient attract sim uses fresh state
   G.graceDocs = 999;        // attract mode: everything stays clean
+  P2.on = false; coopNext = false;
+  titleT = 0;               // the attract demo starts after 15 quiet seconds here
 }
-function startRun(){
+function startRun(coop){
+  if (demo){ endDemo('start', coop === true); return; }
+  /* co-op: asked for (controller 2), or "run it back" after a co-op shift with controller 2 still here */
+  const co = coop === true || (coop === undefined && coopNext && PADS[1].idx !== null);
   try { if (window.grPlayed) window.grPlayed(); } catch (e) {}
   audioInit();
   resetRun();
+  placeRouters(co); coopNext = co;
+  markInput();
   state = 'play';
   paused = false;
   stopFire();
@@ -2203,14 +2546,19 @@ function startRun(){
   saveLocal();
   el.title.classList.add('hidden');
   el.over.classList.add('hidden');
+  el.pause.classList.add('hidden'); menuOpen = false;
   el.hud.classList.add('on');
   renderLives();
   updateHud();
   announceWave(0);
   if (ackBonus) toast('997 BONUS · +1 ESCALATION SLOT', 'good', 2200);
+  if (co) toast('CO-OP SHIFT · TWO ROUTERS, ONE NETWORK', 'good', 2600);
 }
 function gameOver(){
+  if (demo){ endDemo('title'); return; }
+  if (state !== 'play' || G.lives > 0) return;   /* a late timer from a demo or an abandoned shift */
   state = 'over';
+  { const eb = document.querySelector('#over .eyebrow'); if (eb) eb.textContent = P2.on ? 'Co-op shift closed · Performance review' : 'Quarter closed · Performance review'; }
   stopFire();
   sfx.over();
   el.powerglow.className = '';
@@ -2282,11 +2630,72 @@ function gameOver(){
   el.chainhud.classList.remove('on');
   setTimeout(() => el.over.classList.remove('hidden'), 650);
 }
-function togglePause(){
-  paused = !paused;
-  el.pause.classList.toggle('hidden', !paused);
-  if (paused) el.pauselesson.textContent = pick(LESSONS);
+/* ---------- hold menu (Esc, P or Menu) ----------
+   During a shift it holds the grid; on the title or review screen Esc opens the same menu, so there is
+   always one obvious way out: back to the title, the Innovation Guide kiosk, or the guide itself. */
+let menuOpen = false, menuIdx = 0;
+function menuItems(){ return [...el.pause.querySelectorAll('.hm')].filter(b => !b.hidden); }
+function menuFocus(i){
+  const it = menuItems(); if (!it.length) return;
+  menuIdx = (i + it.length) % it.length;
+  it.forEach((b, j) => b.classList.toggle('foc', j === menuIdx));
+  try { it[menuIdx].focus({ preventScroll: true }); } catch (e) {}
+}
+function openMenu(){
+  if (menuOpen || settingsOpen || demo || state === 'boot') return;
+  const hold = state === 'play';
+  if (hold) paused = true;
+  menuOpen = true;
+  el.pause.classList.toggle('menu', !hold);
+  $('pauseeyebrow').textContent = hold ? 'Command Center' : 'Grid Runner';
+  $('pausetitle').textContent = hold ? 'ON HOLD' : 'MENU';
+  const first = el.pause.querySelector('.hm[data-act="resume"] .hl');
+  first.textContent = hold ? 'Resume shift' : (state === 'over' ? 'Run it back' : 'Clock in');
+  el.pause.querySelector('.hm[data-act="end"]').hidden = !hold;
+  if (hold) el.pauselesson.textContent = pick(LESSONS);
+  el.pause.classList.remove('hidden');
+  stopFire();
+  menuFocus(0);
   sfx.ui();
+}
+function closeMenu(){
+  if (!menuOpen) return;
+  menuOpen = false;
+  el.pause.classList.add('hidden');
+  el.pause.querySelectorAll('.hm').forEach(b => b.classList.remove('foc'));
+  try { if (document.activeElement && el.pause.contains(document.activeElement)) document.activeElement.blur(); } catch (e) {}
+  if (state === 'play') paused = false;
+  sfx.ui();
+}
+function togglePause(){
+  if (state !== 'play') return;
+  if (menuOpen) closeMenu(); else openMenu();
+}
+function menuAct(act){
+  markInput();
+  if (act === 'resume'){
+    if (state === 'play') closeMenu();
+    else { const co = state === 'over' && coopNext; closeMenu(); startRun(co); }
+  } else if (act === 'settings') openSettings();
+  else if (act === 'end'){ closeMenu(); stopFire(); showTitle(); }
+  else if (act === 'kiosk') goKiosk();
+  else if (act === 'exit') goGuide();
+}
+el.pause.querySelectorAll('.hm').forEach((b, i) => {
+  b.addEventListener('click', e => { e.stopPropagation(); audioInit(); menuAct(b.getAttribute('data-act')); });
+  b.addEventListener('pointerenter', () => { const it = menuItems(); const j = it.indexOf(b); if (j >= 0) menuFocus(j); });
+});
+/* the menu's own keys; returns true when it handled the key */
+function menuKey(k){
+  if (k === 'ArrowUp'){ menuFocus(menuIdx - 1); sfx.ui(); return true; }
+  if (k === 'ArrowDown'){ menuFocus(menuIdx + 1); sfx.ui(); return true; }
+  if (k === 'Enter' || k === ' '){ const it = menuItems()[menuIdx]; if (it) menuAct(it.getAttribute('data-act')); return true; }
+  if (k === 'Escape' || k === 'p' || k === 'P'){ closeMenu(); return true; }
+  if (k === 's' || k === 'S'){ openSettings(); return true; }
+  if ((k === 'q' || k === 'Q') && state === 'play'){ menuAct('end'); return true; }
+  if (k === 'k' || k === 'K'){ goKiosk(); return true; }
+  if (k === 'e' || k === 'E'){ goGuide(); return true; }
+  return false;
 }
 /* run-specific shift debrief derived from actual chain performance */
 function buildDebrief(){
@@ -3526,7 +3935,7 @@ function fireVolley(){
       vx: Math.abs(off) > 10 ? off * 3 : 0,
       vy: -640 - G.wpn * 18,
       pierce, homing, dmg,
-      hit: null, hitBoss: false
+      hit: null, hitBoss: false, own: P.id
     });
     G.shots++;
   }
@@ -4011,6 +4420,40 @@ buildBG();
 
 /* ---------- update ---------- */
 let glowClass = '';
+/* steer one router; prompt injection inverts both */
+function moveRouter(r, dir, dt){
+  if (G.ctrlFlipT > 0) dir = -dir;
+  if (dir) r.x = clamp(r.x + dir * r.speed * dt, r.w/2, W - r.w/2);
+  /* router thruster trail */
+  if (dir && QUALITY.trails() && Math.random() < 0.55){
+    G.parts.push({ x: r.x - dir * 12 + rnd(-4, 4), y: PLAYER_Y + 20, vx: -dir * rnd(30, 80),
+      vy: rnd(10, 40), life: .26, color: G.aviatorT > 0 ? '#00E6E6' : r.col.trail, size: rnd(1.2, 2.3) });
+  }
+}
+/* cool the current router's validator, then fire if asked and ready (P, heat and cooldown are P2's inside asP2) */
+function routerWeapon(dt, wantFire, noHeat, autoFire){
+  const coolRate = COOL_RATE * (G.superKind === 'gemflash' ? 1.6 : 1) * (G.hot ? 1.5 : 1) * (noHeat ? 3 : 1);
+  G.heat = Math.max(0, G.heat - coolRate * dt);
+  if (G.hot && G.heat <= HEAT_UNLOCK){
+    G.hot = false;
+    addFloat(P.x, PLAYER_Y - 60, 'VALIDATOR READY', '#66A3FF');
+    sfx.ready();
+  }
+  if (noHeat){ G.heat = 0; G.hot = false; }
+  G.fireT = Math.max(0, G.fireT - dt);
+  if (wantFire && (!G.hot || noHeat) && G.fireT <= 0){
+    fireVolley();
+    let rate = FIRE_RATES[G.wpn - 1] * G.fireRateMult;
+    if (G.superKind === 'ceo') rate *= 2.5;
+    else if (G.superKind === 'p1') rate *= 2.0;
+    else if (G.superKind === 'board') rate *= 1.6;
+    else if (G.superKind === 'rrt') rate *= 2.2;
+    else if (G.superKind === 'kickoff') rate *= (1 + G.superRamp);
+    else if (autoFire) rate *= 1.4;
+    if (G.rateLimitT > 0 && !G.superKind) rate *= 0.4;   /* API 429 / change freeze throttles fire */
+    G.fireT = 1 / rate;
+  }
+}
 function update(dt){
   G.time += dt;
   P.cool = Math.max(0, P.cool - dt);
@@ -4032,16 +4475,13 @@ function update(dt){
 
   /* player movement · router speed is its own setting, independent of game speed */
   if (playing){
-    P.speed = moveSpeedPx();
+    P1.speed = P2.speed = moveSpeedPx();
+    if (demo){ autoPilot(P1, AUTO[0], null); if (P2.on) autoPilot(P2, AUTO[1], AUTO[0].tgt); }
     let dir = (keys.R ? 1 : 0) - (keys.L ? 1 : 0);
     if (!dir && PAD.dir) dir = PAD.dir;              /* controller: analog left stick or d-pad */
-    if (G.ctrlFlipT > 0) dir = -dir;                 /* prompt injection inverts steering */
-    if (dir) P.x = clamp(P.x + dir * P.speed * dt, P.w/2, W - P.w/2);
-    /* router thruster trail */
-    if (dir && QUALITY.trails() && Math.random() < 0.55){
-      G.parts.push({ x: P.x - dir * 12 + rnd(-4, 4), y: PLAYER_Y + 20, vx: -dir * rnd(30, 80),
-        vy: rnd(10, 40), life: .26, color: G.aviatorT > 0 ? '#00E6E6' : '#4EA8FF', size: rnd(1.2, 2.3) });
-    }
+    if (demo) dir = AUTO[0].dir;
+    moveRouter(P1, dir, dt);
+    if (P2.on) moveRouter(P2, demo ? AUTO[1].dir : PADS[1].dir, dt);
   }
 
   /* heat + firing */
@@ -4055,14 +4495,6 @@ function update(dt){
     }
   }
   const noHeat = G.superKind === 'ceo' || G.superKind === 'p1';
-  const coolRate = COOL_RATE * (G.superKind === 'gemflash' ? 1.6 : 1) * (G.hot ? 1.5 : 1) * (noHeat ? 3 : 1);
-  G.heat = Math.max(0, G.heat - coolRate * dt);
-  if (G.hot && G.heat <= HEAT_UNLOCK){
-    G.hot = false;
-    addFloat(P.x, PLAYER_Y - 60, 'VALIDATOR READY', '#66A3FF');
-    sfx.ready();
-  }
-  if (noHeat){ G.heat = 0; G.hot = false; }
   /* network health heals; Performance Monitor accelerates recovery */
   if (playing){
     G.availability = Math.min(100, G.availability + 1.6 * G.regenMult * dt);
@@ -4070,21 +4502,10 @@ function update(dt){
     G.perfect = Math.min(100, G.perfect + 0.12 * dt);   /* clean running slowly recovers the scorecard */
     if (G.availability > 72 && G.throughput > 72) resilAdd(0.14 * dt);   /* steady healthy flow builds resilience */
   }
-  G.fireT = Math.max(0, G.fireT - dt);
+  /* each router has its own validator heat; P2's runs inside asP2() */
   const autoFire = G.superKind === 'warroom' || G.superKind === 'fts';
-  const wantFire = isFiring() || autoFire;
-  if (playing && wantFire && (!G.hot || noHeat) && G.fireT <= 0){
-    fireVolley();
-    let rate = FIRE_RATES[G.wpn - 1] * G.fireRateMult;
-    if (G.superKind === 'ceo') rate *= 2.5;
-    else if (G.superKind === 'p1') rate *= 2.0;
-    else if (G.superKind === 'board') rate *= 1.6;
-    else if (G.superKind === 'rrt') rate *= 2.2;
-    else if (G.superKind === 'kickoff') rate *= (1 + G.superRamp);
-    else if (autoFire) rate *= 1.4;
-    if (G.rateLimitT > 0 && !G.superKind) rate *= 0.4;   /* API 429 / change freeze throttles fire */
-    G.fireT = 1 / rate;
-  }
+  routerWeapon(dt, playing && (isFiring() || autoFire), noHeat, autoFire);
+  if (P2.on) asP2(() => routerWeapon(dt, playing && ((demo ? AUTO[1].fire : PADS[1].fire) || autoFire), noHeat, autoFire));
   /* Decisions Intel / Aviator / Gemini auto-triage: reject the nearest malformed doc on a budget */
   if (playing && G.triageRate > 0){
     G.triageT -= dt;
@@ -4100,11 +4521,11 @@ function update(dt){
   if (playing && G.mcpCount > 0){
     G.mcpFireT -= dt;
     if (G.mcpFireT <= 0){
-      const n = G.mcpCount;
+      const n = G.mcpCount, rs = routers(), r = rs[(G.mcpVolley = (G.mcpVolley || 0) + 1) % rs.length];
       for (let i = 0; i < n; i++){
         const off = (i - (n - 1) / 2) * 52;
-        const dx = clamp(P.x + off, 20, W - 20);
-        G.missiles.push({ x: dx, y: PLAYER_Y - 26, vx: 0, vy: -560, pierce: false, homing: true, dmg: G.missileDmg, hit: null, hitBoss: false });
+        const dx = clamp(r.x + off, 20, W - 20);
+        G.missiles.push({ x: dx, y: PLAYER_Y - 26, vx: 0, vy: -560, pierce: false, homing: true, dmg: G.missileDmg, hit: null, hitBoss: false, own: r.id });
         G.shots++;
       }
       sfx.shoot();
@@ -4221,7 +4642,7 @@ function update(dt){
     const cutoffNow = G.event && G.event.kind === 'cutoff';
     const chainLoad = 1 + 0.34 * activeChainCount();
     let base = playing
-      ? Math.max(0.34, 1.15 - G.wave * 0.085) * (G.boss ? 1.7 : 1) * (cutoffNow ? 0.42 : 1) * (G.event && G.event.kind === 'surge' ? 0.4 : 1) * chainLoad / (G.D ? G.D.spawn : 1)
+      ? Math.max(0.34, 1.15 - G.wave * 0.085) * (G.boss ? 1.7 : 1) * (cutoffNow ? 0.42 : 1) * (G.event && G.event.kind === 'surge' ? 0.4 : 1) * chainLoad / (G.D ? G.D.spawn : 1) / (P2.on ? 1.15 : 1)
       : 1.5;
     G.spawnT = base * rnd(0.75, 1.25);
   }
@@ -4269,7 +4690,7 @@ function update(dt){
     /* boss collision */
     if (G.boss && !m.hitBoss && G.boss.y > 0 &&
         Math.abs(m.x - G.boss.x) < G.boss.w/2 && Math.abs(m.y - G.boss.y) < G.boss.h/2){
-      hitBoss(m);
+      KILLER = m.own || 1; hitBoss(m); KILLER = 0;
       if (!G.boss || !m.pierce){ m.dead = true; continue; }
       m.hitBoss = true;
     }
@@ -4277,7 +4698,7 @@ function update(dt){
     for (const d of G.docs){
       if (d.dead || !d.bad || d === m.hit) continue;
       if (Math.abs(m.x - d.x) < d.w/2 + 5 && Math.abs(m.y - d.y) < d.h/2 + 8){
-        damageBad(d, m);
+        KILLER = m.own || 1; damageBad(d, m); KILLER = 0;
         if (m.pierce){ m.hit = d; } else { m.dead = true; }
         break;
       }
@@ -4314,13 +4735,13 @@ function update(dt){
 
     /* Auto Portal / Aviator magnet pulls clean docs into the tray (stronger, wider with level) */
     if (playing && G.magnetLvl > 0 && !d.bad && !d.env && !d.intel && d.y > H - (150 + G.magnetLvl * 40)){
-      d.x += (P.x - d.x) * Math.min(1, dt * (7 + G.magnetLvl * 2));
+      d.x += (nearestRouter(d.x).x - d.x) * Math.min(1, dt * (7 + G.magnetLvl * 2));
     }
 
     /* envelopes cannot be caught, only shot open */
     if (playing && !d.env && d.y + d.h/2 >= PLAYER_Y && d.y - d.h/2 <= PLAYER_Y + 44){
-      const reach = (d.w + P.w) / 2 - 10;
-      if (Math.abs(d.x - P.x) < reach){ catchDoc(d); continue; }
+      const r = nearestRouter(d.x);
+      if (Math.abs(d.x - r.x) < (d.w + r.w) / 2 - 10){ asRouter(r, () => catchDoc(d)); continue; }
     }
     if (d.y - d.h/2 > H){
       d.dead = true;
@@ -4339,8 +4760,9 @@ function update(dt){
   for (const p of G.pups){
     if (p.dead) continue;
     p.y += p.vy * sdt;
-    if (playing && p.y >= PLAYER_Y - 14 && p.y <= PLAYER_Y + 46 && Math.abs(p.x - P.x) < P.w/2 + 24){
-      grabPowerup(p); continue;
+    if (playing && p.y >= PLAYER_Y - 14 && p.y <= PLAYER_Y + 46){
+      const r = nearestRouter(p.x);
+      if (Math.abs(p.x - r.x) < r.w/2 + 24){ asRouter(r, () => grabPowerup(p)); continue; }
     }
     if (p.y > H + 30) p.dead = true;
   }
@@ -5126,9 +5548,9 @@ function drawPlayer(){
     }
   }
   /* cannon barrel */
-  ctx.shadowColor = hot ? 'rgba(255,92,77,0.9)' : avi ? 'rgba(0,230,230,0.9)' : 'rgba(51,133,255,0.9)';
+  ctx.shadowColor = hot ? 'rgba(255,92,77,0.9)' : avi ? 'rgba(0,230,230,0.9)' : P.col.glowB;
   ctx.shadowBlur = 12;
-  ctx.fillStyle = hot ? '#FF5C4D' : avi ? '#00E6E6' : '#3385FF';
+  ctx.fillStyle = hot ? '#FF5C4D' : avi ? '#00E6E6' : P.col.barrel;
   rr(P.x - 4, y - 17, 8, 17, 2); ctx.fill();
   if (G.wpn >= 3){ rr(P.x - 20, y - 11, 5, 11, 2); ctx.fill(); rr(P.x + 15, y - 11, 5, 11, 2); ctx.fill(); }
   if (G.wpn >= 5){ rr(P.x - 34, y - 8, 5, 8, 2); ctx.fill(); rr(P.x + 29, y - 8, 5, 8, 2); ctx.fill(); }
@@ -5147,9 +5569,9 @@ function drawPlayer(){
     ctx.restore();
   }
   /* glow bar */
-  ctx.shadowColor = hot ? 'rgba(255,92,77,0.9)' : avi ? 'rgba(0,230,230,0.9)' : 'rgba(0,102,255,0.9)';
+  ctx.shadowColor = hot ? 'rgba(255,92,77,0.9)' : avi ? 'rgba(0,230,230,0.9)' : P.col.glow;
   ctx.shadowBlur = 20;
-  ctx.fillStyle = hot ? '#FF5C4D' : avi ? '#00E6E6' : '#0066FF';
+  ctx.fillStyle = hot ? '#FF5C4D' : avi ? '#00E6E6' : P.col.bar;
   rr(x, y, P.w, 6, 3); ctx.fill();
   ctx.shadowBlur = 0;
   /* body */
@@ -5157,7 +5579,7 @@ function drawPlayer(){
   ctx.fillStyle = '#16243C'; ctx.fill();
   ctx.strokeStyle = '#33425C'; ctx.lineWidth = 1; ctx.stroke();
   /* side brackets */
-  ctx.strokeStyle = avi ? 'rgba(0,230,230,0.8)' : 'rgba(102,163,255,0.8)';
+  ctx.strokeStyle = avi ? 'rgba(0,230,230,0.8)' : P.col.bracket;
   ctx.lineWidth = 2;
   ctx.beginPath(); ctx.moveTo(x - 2, y - 10); ctx.lineTo(x - 2, y + 16); ctx.stroke();
   ctx.beginPath(); ctx.moveTo(x + P.w + 2, y - 10); ctx.lineTo(x + P.w + 2, y + 16); ctx.stroke();
@@ -5167,6 +5589,17 @@ function drawPlayer(){
   ctx.textAlign = 'center';
   const platLabel = ['EDGE ROUTER', 'NETWORK CONSOLE', 'ORCHESTRATION PLATFORM', 'GLOBAL OPERATIONS ARRAY'][tier];
   ctx.fillText(hot ? 'VENTING . . .' : avi ? 'AVIATOR PILOTING' : platLabel, P.x, y + 20);
+  /* co-op: a player tag on each router and its own validator heat under it */
+  if (P2.on){
+    ctx.fillStyle = P.col.tag;
+    ctx.font = '800 11px ui-monospace, Menlo, monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('P' + P.id, x + 4, y - 5);
+    ctx.textAlign = 'center';
+    const hw = P.w - 24, hf = clamp(G.heat / HEAT_MAX, 0, 1);
+    ctx.fillStyle = '#141F33'; rr(x + 12, y + 31, hw, 3, 1.5); ctx.fill();
+    if (hf > 0){ ctx.fillStyle = G.hot ? '#FF5C4D' : (G.heat > 60 ? '#FF8C3B' : P.col.barrel); rr(x + 12, y + 31, hw * hf, 3, 1.5); ctx.fill(); }
+  }
   /* status LEDs */
   for (let i = 0; i < 3; i++){
     ctx.fillStyle = (((G.time * 3 + i) | 0) % 3 === 0) ? '#00E6E6' : '#22344F';
@@ -5450,6 +5883,7 @@ function render(){
   drawMissiles();
   drawReveals();
   drawPlayer();
+  if (P2.on) asP2(drawPlayer);
   drawAgents();
   drawFx();
   drawChainFx();
@@ -5781,6 +6215,7 @@ function loop(t){
   const dt = clamp((t - last) / 1000, 0, 0.05);
   last = t;
   pollPad();
+  attractTick(dt);
   if (state === 'play' && !paused && !quizOpen) monitorFrame(dt);
   if (!paused && !quizOpen && state !== 'over') update(dt);
   render();
