@@ -2273,6 +2273,14 @@ footer .ftop svg{flex:none}
   .hero .pdots i.on{width:16px;background:#fff}
 }
 @media (prefers-reduced-motion:reduce){.hero .pdots i{transition:none}}
+
+/* clickable prototypes (owner, Oct 10): a link under the summary of their Looking ahead entries, opening a new tab */
+.inn .proto{display:inline-flex;align-items:center;gap:8px;margin-top:14px;min-height:44px;padding:9px 16px;border:2px solid var(--blue);border-radius:var(--r-s);background:var(--white);color:var(--blue);font:700 15px/20px Inter,Arial,sans-serif;letter-spacing:-.01em;text-decoration:none}
+.inn .proto:hover{background:var(--info-tint)}
+.inn .proto svg{flex:none}
+.inn .proto .pe{opacity:.8}
+.inn .proto .pu{display:none}
+@media print{.inn .proto{display:inline;margin:3pt 0 0;min-height:0;padding:0;border:0;background:none;font-size:8pt;line-height:11pt;color:var(--ink)}.inn .proto svg{display:none}.inn .proto .pu{display:inline;font-weight:400;color:var(--blue)}}
 </style>
 
 <div class="cover">
@@ -4025,6 +4033,7 @@ footer .ftop svg{flex:none}
     <div class="label lbl">Command Center Performance Monitor</div>
     <div class="ttl"><h3>Command Center Performance Monitor</h3><span class="ga pv">Incubation</span></div>
     <p class="deck">Aviator agents monitor Trading Grid transactions against rules you set in plain language, explain every finding, and score partner performance.</p>
+    <a class="proto" href="https://ccpmotw.netlify.app" target="_blank" rel="noopener" aria-label="Try the Command Center Performance Monitor clickable prototype (opens in a new tab)"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 2.5l8.5 5.2-3.9.9 2.2 4-1.6.9-2.2-4L4 12.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span>Try the clickable prototype</span><svg class="pe" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 7.5 8.5M11.5 9.5v3a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="pu">: ccpmotw.netlify.app</span></a>
   </div>
   <figure class="gal">
     <button type="button" class="zoom" data-src="img/2026-h2/ccpm-agents.png" aria-label="View full size: Create a rule by picking the agent whose job matches what you need to catch, then work through scope, expected behavior, reference data, budget and a test."><img src="img/2026-h2/ccpm-agents.png" width="1919" height="1079" alt="Create new rule wizard, step 1 of 8, asking what you want an agent to do, with cards for Nora the conformance agent, Liz the process agent, timing and SLA checks between transactions, and reconciling content and value across documents."><span class="zi"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
@@ -4043,6 +4052,7 @@ footer .ftop svg{flex:none}
     <div class="label lbl">Trading Grid ASN Intelligence</div>
     <div class="ttl"><h3>Trading Grid ASN Intelligence</h3><span class="ga pv">In development</span></div>
     <p class="deck">Spot ASN risks early. Resolve issues faster. Improve supplier performance.</p>
+    <a class="proto" href="https://asnintotw.netlify.app" target="_blank" rel="noopener" aria-label="Try the Trading Grid ASN Intelligence clickable prototype (opens in a new tab)"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 2.5l8.5 5.2-3.9.9 2.2 4-1.6.9-2.2-4L4 12.3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span>Try the clickable prototype</span><svg class="pe" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 7.5 8.5M11.5 9.5v3a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1h3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="pu">: asnintotw.netlify.app</span></a>
   </div>
   <figure class="gal">
     <button type="button" class="zoom" data-src="img/2026-h2/tgasn-dashboard.jpg" aria-label="View full size: Risk insights and operational benchmarking: historical and real-time ASN data to identify trends, improve supplier performance and reduce operational disruptions."><img src="img/2026-h2/tgasn-dashboard.jpg" width="1672" height="941" alt="ASN Intelligence dashboard with a 14-day summary of 22 ASNs by first pass, recovered, failed and partial success, first pass success and SLA recovery rates, issue counts by risk level, and the top 10 failure categories led by missing required field and syntax error."><span class="zi"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
