@@ -5175,4 +5175,15 @@ dlg.addEventListener('close',function(){st.innerHTML='';show(zi);op.focus({preve
     dots.forEach(function(e,j){e.classList.toggle('on',j===i);});}
   row.addEventListener('scroll',function(){if(!tk){tk=true;requestAnimationFrame(upd);}},{passive:true});window.addEventListener('resize',upd);upd();
 })();</script>
+<script>/* Pillar previews scroll to their picture (owner, Oct 10) */(function(){
+  var root=document.documentElement,pf=document.querySelector('#la-portfolio .pf');if(!pf)return;
+  function gap(){var t=[].filter.call(document.querySelectorAll('.toc'),function(x){return x.offsetHeight>0&&getComputedStyle(x).position==='sticky';})[0];return (t?t.offsetHeight:0)+12;}
+  [].forEach.call(pf.querySelectorAll('.pf-tab'),function(tab){
+    tab.addEventListener('click',function(){
+      if(!root.classList.contains('ph'))return;
+      var pane=document.getElementById(tab.getAttribute('aria-controls'));if(!pane)return;
+      requestAnimationFrame(function(){if(pane.hidden)return;var dy=pane.getBoundingClientRect().top-gap();if(Math.abs(dy)>8)window.scrollTo({top:Math.max(0,window.pageYOffset+dy)});});
+    });
+  });
+})();</script>
 <script>/* count one open of the guide: no cookies, see /stats/ */(function(){try{if(navigator.webdriver||location.protocol!=="https:")return;var u="https://tg-guide-stats.onrender.com/api/hit",b=new Blob(["{}"],{type:"text/plain"});if(!(navigator.sendBeacon&&navigator.sendBeacon(u,b)))fetch(u,{method:"POST",body:"{}",keepalive:true,mode:"no-cors"});}catch(e){}})();</script></body></html>
