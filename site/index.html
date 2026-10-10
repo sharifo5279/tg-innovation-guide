@@ -2162,6 +2162,17 @@ footer .ftop svg{flex:none}
   footer .fmeta{display:block;margin-top:4pt}
   footer .ed{font-size:6.5pt;line-height:9pt}
 }
+
+/* kiosk entry on the banner grid (owner, Oct 10): the button shares the eyebrow's line, and from 1320px the button and the
+   footer link columns sit on the banner's four pillar columns (28px gaps) */
+@media(min-width:900px){.hero>.wrap .conf-btn{top:60px}}
+@media(min-width:1320px){
+  .hero>.wrap .conf-btn{width:calc((100% - 2*var(--gut) - 84px)/4);justify-content:center}
+  footer .fgrid{grid-template-columns:repeat(4,minmax(0,1fr));column-gap:28px}
+  footer .fbrand{grid-column:1/3}
+  footer .fcols{grid-column:3/5;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
+  footer .fbar{grid-column:1/-1}
+}
 </style>
 
 <div class="cover">
