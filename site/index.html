@@ -2250,6 +2250,29 @@ footer .ftop svg{flex:none}
   html.ph dialog .ztip .zt-r{display:none}
 }
 @media (prefers-reduced-motion:reduce){html.ph .tabs,html.ph .toc,.rm-t svg{transition:none}}
+
+/* ===== Phone banner (owner, Oct 10): compact title, pillars as swipe cards ===== */
+.hero .pdots{display:none}
+@media screen and (max-width:699px),screen and (pointer:coarse) and (max-height:520px){
+  .hero>.wrap{padding-top:22px;padding-bottom:22px}
+  .hero .eyebrow{margin-bottom:12px}
+  .hero .hz-area{font-size:16px;line-height:20px;margin:0 0 2px}
+  .hero h1{font-size:36px;line-height:1.05;margin:0 0 2px}
+  .hero .hz-ed{font-size:18px;line-height:24px;margin:0 0 10px}
+  .hero .lead{font-size:15px;line-height:22px}
+  .hero .roles.pf4{display:flex;gap:10px;max-width:none;margin:18px calc(-1 * var(--gr)) 0 calc(-1 * var(--gl));padding:0 var(--gr) 2px var(--gl);overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 var(--gl);overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .hero .roles.pf4::-webkit-scrollbar{display:none}
+  .hero .roles.pf4>div{position:relative;flex:0 0 min(76%,320px);scroll-snap-align:start;scroll-snap-stop:always;margin:0;border:1px solid rgba(255,255,255,.3);border-radius:12px;padding:12px 34px 14px 14px;font-size:13px;line-height:18px;color:rgba(255,255,255,.82)}
+  .hero .roles.pf4 a{position:static;display:block;margin:0 0 4px;font-size:15px;line-height:20px;letter-spacing:-.01em}
+  .hero .roles.pf4 a::before{content:"";position:absolute;inset:0;border-radius:12px}
+  .hero .roles.pf4 a::after{position:absolute;top:19px;right:16px;margin:0}
+  .hero .roles.pf4 a:focus-visible{outline:none}
+  .hero .roles.pf4 a:focus-visible::before{outline:2px solid #fff;outline-offset:2px}
+  .hero .pdots{display:flex;gap:6px;margin-top:12px}
+  .hero .pdots i{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.35);transition:width .2s,background .2s}
+  .hero .pdots i.on{width:16px;background:#fff}
+}
+@media (prefers-reduced-motion:reduce){.hero .pdots i{transition:none}}
 </style>
 
 <div class="cover">
@@ -5131,5 +5154,14 @@ dlg.addEventListener('close',function(){st.innerHTML='';show(zi);op.focus({preve
   var tg=document.querySelector('dialog.tgz');
   if(tg){var ts=tg.querySelector('.tgz-st'),tz=zoomable(tg,ts,tg.querySelector('.zp'),tg.querySelector('.zx'),tg.querySelector('.close'),tg.querySelector('.cap'));
     if(tz&&window.MutationObserver)new MutationObserver(function(){tz.reset(false);}).observe(ts,{childList:true});}
+})();</script>
+<script>/* Phone banner (owner, Oct 10): dots under the pillar cards follow the swipe */(function(){
+  var row=document.querySelector('.hero .roles');if(!row)return;var cards=[].slice.call(row.children);if(cards.length<2)return;
+  var d=document.createElement('div');d.className='pdots';d.setAttribute('aria-hidden','true');d.innerHTML=cards.map(function(){return '<i></i>';}).join('');row.insertAdjacentElement('afterend',d);
+  var dots=[].slice.call(d.children),tk=false;
+  function upd(){tk=false;var max=row.scrollWidth-row.clientWidth,i=0;
+    if(max>2){if(row.scrollLeft>=max-2)i=cards.length-1;else{var x0=row.getBoundingClientRect().left,best=1e9;cards.forEach(function(c,j){var dx=Math.abs(c.getBoundingClientRect().left-x0-(parseFloat(getComputedStyle(row).paddingLeft)||0));if(dx<best){best=dx;i=j;}});}}
+    dots.forEach(function(e,j){e.classList.toggle('on',j===i);});}
+  row.addEventListener('scroll',function(){if(!tk){tk=true;requestAnimationFrame(upd);}},{passive:true});window.addEventListener('resize',upd);upd();
 })();</script>
 <script>/* count one open of the guide: no cookies, see /stats/ */(function(){try{if(navigator.webdriver||location.protocol!=="https:")return;var u="https://tg-guide-stats.onrender.com/api/hit",b=new Blob(["{}"],{type:"text/plain"});if(!(navigator.sendBeacon&&navigator.sendBeacon(u,b)))fetch(u,{method:"POST",body:"{}",keepalive:true,mode:"no-cors"});}catch(e){}})();</script></body></html>
