@@ -29,6 +29,21 @@ Kiosk behaviour (OpenText World):
 - Innovation Guide kiosk: Y or K on the title, review and hold screens (and a button on each) opens `/#conference`,
   which starts the guide's OpenText World kiosk mode.
 
+Link previews (Messages, Teams, WhatsApp, LinkedIn):
+- The guide (`/`) shares as the banner card. Each product listed in the master's `script#tg-share` (Generally available
+  products and Looking ahead entries) has a share page `/s/<slug>/` with its own product-screen card; it forwards readers
+  to the product in the guide (`#id`, or the entry named after `#` in the share link), while preview robots stay and read
+  the tags. Titles and descriptions come from the master on every build.
+- The On this page Share button shares the product on screen (or the guide at that section): the share sheet on touch
+  screens, a copied link on computers.
+- Cards: `tools/share-cards/render.mjs` (needs Playwright) writes 1200 x 630 JPEGs under 300 KB to
+  `tools/share-cards/out`, which the build copies to `/share/`. Re-render after a product's name, summary or first
+  screenshots change, then build:
+  `NODE_PATH=<global node_modules> node tools/share-cards/render.mjs /path/to/master.html /path/to/image-root`.
+  A product without a card falls back to the banner card.
+- Apps cache previews per link. LinkedIn's Post Inspector refreshes its copy; the card image URLs carry a content hash,
+  so a new card is fetched once the app reads the page again.
+
 Build:
 
 ```

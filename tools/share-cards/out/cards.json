@@ -1,0 +1,133 @@
+{
+ "integration-monitor": {
+  "id": "command-center",
+  "name": "Command Center Integration Monitor",
+  "screens": [
+   "img/2026-h2/ccim-daily-digest.png",
+   "img/2026-h2/ccim-projections-heatmap.png",
+   "img/2026-h2/ccim-volume-spike-anomalies.png"
+  ]
+ },
+ "insights": {
+  "id": "tg-insights",
+  "name": "Trading Grid Insights",
+  "screens": [
+   "img/2026-h2/tgi-dashboards-2-hd.png",
+   "img/2026-h2/tgi-alerts-hd.png",
+   "img/2026-h2/tgi-reports-hd.png"
+  ]
+ },
+ "supplier-hub": {
+  "id": "ga-supplier-hub",
+  "name": "Trading Grid Supplier Hub",
+  "screens": [
+   "img/2026-h2/tgsh-pipeline.webp",
+   "img/2026-h2/tgsh-po-linking.webp"
+  ]
+ },
+ "compliance-link": {
+  "id": "ga-compliance-link",
+  "name": "Trading Grid Intelligence: Compliance Link",
+  "screens": []
+ },
+ "chargeback-deductions": {
+  "id": "ga-chargeback-deductions",
+  "name": "Trading Grid Intelligence: Chargeback & Deductions",
+  "screens": []
+ },
+ "e-invoicing": {
+  "id": "ga-e-invoicing-navigator",
+  "name": "Trading Grid e-Invoicing",
+  "screens": []
+ },
+ "aviator": {
+  "id": "tg-aviator",
+  "name": "Trading Grid Aviator",
+  "screens": [
+   "img/2026-h2/ccim-daily-digest.png",
+   "img/2026-h2/ccim-monitoring-insights.png",
+   "img/2026-h2/ccim-aviator-assistant.png"
+  ]
+ },
+ "aviator-iot": {
+  "id": "ga-aviator-iot",
+  "name": "OpenText Aviator IoT",
+  "screens": [
+   "img/2026-h2/iot-exceptions.webp",
+   "img/2026-h2/iot-chat-dashboard.webp",
+   "img/2026-h2/iot-scan-new.webp"
+  ]
+ },
+ "core-collaboration-access": {
+  "id": "ga-core-collaboration-access",
+  "name": "Core Collaboration Access",
+  "screens": []
+ },
+ "cartographer": {
+  "id": "tg-cartographer",
+  "name": "Trading Grid Cartographer",
+  "screens": [
+   "img/2026-h2/tgc-map-inventory.webp",
+   "img/2026-h2/tgc-map-level.webp",
+   "img/2026-h2/tgc-rule-explorer.webp"
+  ]
+ },
+ "performance-monitor": {
+  "id": "pv-ccpm",
+  "name": "Command Center Performance Monitor",
+  "screens": [
+   "img/2026-h2/ccpm-agents.png",
+   "img/2026-h2/ccpm-rules.png",
+   "img/2026-h2/ccpm-findings.png"
+  ]
+ },
+ "asn-intelligence": {
+  "id": "pv-tgasn",
+  "name": "Trading Grid ASN Intelligence",
+  "screens": [
+   "img/2026-h2/tgasn-dashboard.jpg",
+   "img/2026-h2/tgasn-all-asns.jpg",
+   "img/2026-h2/tgasn-remediation.jpg"
+  ]
+ },
+ "shipment-packing-visibility": {
+  "id": "pv-tgsh",
+  "name": "Comprehensive shipment packing visibility",
+  "screens": [
+   "img/2026-h2/tgsh-packing-hierarchy.webp",
+   "img/2026-h2/tgsh-packing-lines.webp"
+  ]
+ },
+ "decisions-intelligence": {
+  "id": "pv-tgdi",
+  "name": "Trading Grid Decisions Intelligence",
+  "screens": [
+   "img/2026-h2/tgdi-account-detail.jpg",
+   "img/2026-h2/tgdi-overview.jpg",
+   "img/2026-h2/tgdi-breakdowns.jpg"
+  ]
+ },
+ "data-explorer": {
+  "id": "pv-tgde",
+  "name": "Trading Grid Data Explorer",
+  "screens": [
+   "img/2026-h2/tgde-query-builder.png",
+   "img/2026-h2/tgde-data-products.png",
+   "img/2026-h2/tgde-preview.png"
+  ]
+ },
+ "context-services": {
+  "id": "pv-tgcs",
+  "name": "Trading Grid Context Services",
+  "screens": [
+   "img/2026-h2/tgcs-why.png",
+   "img/2026-h2/tgcs-sources.png",
+   "img/2026-h2/tgcs-offers.png"
+  ]
+ },
+ "aviator-roadmap": {
+  "id": "pv-tga",
+  "name": "Trading Grid Aviator",
+  "screens": []
+ }
+}
