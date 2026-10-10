@@ -2268,7 +2268,7 @@ footer .ftop svg{flex:none}
   .hero .roles.pf4 a::after{position:absolute;top:19px;right:16px;margin:0}
   .hero .roles.pf4 a:focus-visible{outline:none}
   .hero .roles.pf4 a:focus-visible::before{outline:2px solid #fff;outline-offset:2px}
-  .hero .pdots{display:flex;gap:6px;margin-top:12px}
+  .hero .roles.pf4,.hero .pdots{display:none}
   .hero .pdots i{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.35);transition:width .2s,background .2s}
   .hero .pdots i.on{width:16px;background:#fff}
 }
@@ -4421,7 +4421,7 @@ dlg.addEventListener('close',function(){st.innerHTML='';show(zi);op.focus({preve
     var hr=cur.getAttribute('href'),dup=links.filter(function(a){return a.getAttribute('href')===hr;});var pf0=window.__tocPref;if(pf0&&pf0.getAttribute('href')!==hr&&Date.now()-(window.__tocPrefT||0)>1500)window.__tocPref=null;if(dup.length>1){var pf=window.__tocPref,lg=window.__tocLast&&window.__tocLast.closest('li.gi'),pk=null;if(pf&&dup.indexOf(pf)>-1)pk=pf;else if(lg)dup.forEach(function(a){if(!pk&&a.closest('li.gi')===lg)pk=a;});if(pk)cur=pk;}window.__tocLast=cur;
     links.forEach(function(a){a.classList.toggle('active',a===cur);});
     var c=p.querySelector('.toc-head .cur');if(c)c.textContent=cur.textContent;
-    var gi=cur.closest('li.gi');[].slice.call(p.querySelectorAll('.toc li.gi')).forEach(function(li){var on=li===gi;li.classList.toggle('in',on);if(on)li.classList.add('open');else if(!li.dataset.pinned)li.classList.remove('open');var b=li.querySelector('.tog');if(b)b.setAttribute('aria-expanded',li.classList.contains('open')?'true':'false');});var tc=cur.closest('.toc');if(tc&&tc.scrollHeight>tc.clientHeight+1&&getComputedStyle(tc).overflowY!=='visible'&&!tc.matches(':hover')){var sr=tc.getBoundingClientRect(),lr=cur.getBoundingClientRect();if(lr.top<sr.top+48)tc.scrollTop-=sr.top+48-lr.top;else if(lr.bottom>sr.bottom-48)tc.scrollTop+=lr.bottom-(sr.bottom-48);}}
+    var gi=cur.closest('li.gi');[].slice.call(p.querySelectorAll('.toc li.gi')).forEach(function(li){var on=li===gi;li.classList.toggle('in',on);if(on&&!(window.matchMedia&&matchMedia('(max-width:999px)').matches))li.classList.add('open');else if(!li.dataset.pinned)li.classList.remove('open');var b=li.querySelector('.tog');if(b)b.setAttribute('aria-expanded',li.classList.contains('open')?'true':'false');});var tc=cur.closest('.toc');if(tc&&tc.scrollHeight>tc.clientHeight+1&&getComputedStyle(tc).overflowY!=='visible'&&!tc.matches(':hover')){var sr=tc.getBoundingClientRect(),lr=cur.getBoundingClientRect();if(lr.top<sr.top+48)tc.scrollTop-=sr.top+48-lr.top;else if(lr.bottom>sr.bottom-48)tc.scrollTop+=lr.bottom-(sr.bottom-48);}}
   window.addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(spy);}},{passive:true});
   [].slice.call(document.querySelectorAll('.toc .tog')).forEach(function(b){b.addEventListener('click',function(){var li=b.closest('li.gi');var open=!li.classList.contains('open');li.classList.toggle('open',open);if(open)li.dataset.pinned='1';else delete li.dataset.pinned;b.setAttribute('aria-expanded',open?'true':'false');});});
   [].slice.call(document.querySelectorAll('.toc-head')).forEach(function(h){h.addEventListener('click',function(){var t=h.closest('.toc');var o=!t.classList.contains('open');t.classList.toggle('open',o);h.setAttribute('aria-expanded',o?'true':'false');});});
@@ -5155,6 +5155,7 @@ dlg.addEventListener('close',function(){st.innerHTML='';show(zi);op.focus({preve
   if(tg){var ts=tg.querySelector('.tgz-st'),tz=zoomable(tg,ts,tg.querySelector('.zp'),tg.querySelector('.zx'),tg.querySelector('.close'),tg.querySelector('.cap'));
     if(tz&&window.MutationObserver)new MutationObserver(function(){tz.reset(false);}).observe(ts,{childList:true});}
 })();</script>
+<script>/* Phone toc (owner, Oct 10): the On this page dropdown opens with every group collapsed */(function(){if(!(window.matchMedia&&matchMedia('(max-width:999px)').matches))return;[].slice.call(document.querySelectorAll('.toc li.gi.open')).forEach(function(li){if(li.dataset.pinned)return;li.classList.remove('open');var b=li.querySelector('.tog');if(b)b.setAttribute('aria-expanded','false');});})();</script>
 <script>/* Phone banner (owner, Oct 10): dots under the pillar cards follow the swipe */(function(){
   var row=document.querySelector('.hero .roles');if(!row)return;var cards=[].slice.call(row.children);if(cards.length<2)return;
   var d=document.createElement('div');d.className='pdots';d.setAttribute('aria-hidden','true');d.innerHTML=cards.map(function(){return '<i></i>';}).join('');row.insertAdjacentElement('afterend',d);
