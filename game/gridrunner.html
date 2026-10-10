@@ -664,6 +664,8 @@
     #scan{display:none}
     #pressstart,#tickerdot,#demoline{animation:none}
   }
+  /* phones: the guide's OpenText World kiosk mode is not offered there, so neither are the links into it */
+  @media (max-width:899px),(pointer:coarse) and (max-height:520px){.kioskbtn,.hm[data-act="kiosk"]{display:none}}
 </style>
 </head>
 <body>
@@ -2634,7 +2636,7 @@ function gameOver(){
    During a shift it holds the grid; on the title or review screen Esc opens the same menu, so there is
    always one obvious way out: back to the title, the Innovation Guide kiosk, or the guide itself. */
 let menuOpen = false, menuIdx = 0;
-function menuItems(){ return [...el.pause.querySelectorAll('.hm')].filter(b => !b.hidden); }
+function menuItems(){ const ph = matchMedia('(max-width:899px),(pointer:coarse) and (max-height:520px)').matches; return [...el.pause.querySelectorAll('.hm')].filter(b => !b.hidden && !(ph && b.dataset.act === 'kiosk')); }
 function menuFocus(i){
   const it = menuItems(); if (!it.length) return;
   menuIdx = (i + it.length) % it.length;

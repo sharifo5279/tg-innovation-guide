@@ -724,7 +724,7 @@ html.ss-on,html.ss-on body{overflow:hidden}html.ss-on{scroll-behavior:auto!impor
 .conf-btn{position:absolute;top:22px;right:var(--gut);z-index:2;appearance:none;display:inline-flex;align-items:center;gap:8px;margin:0;padding:8px 18px 8px 14px;border:1px solid rgba(255,255,255,.7);border-radius:999px;background:transparent;color:#fff;font:700 14px/20px Inter,Arial,sans-serif;cursor:pointer}
 .conf-btn:hover{background:#fff;color:var(--blue-dark)}
 .conf-btn:focus-visible{outline:2px solid #fff;outline-offset:3px}
-@media(max-width:899px){.conf-btn{display:none}}
+@media (max-width:899px),(pointer:coarse) and (max-height:520px){.conf-btn{display:none}}
 .ss-top{position:relative}
 .ss-timer{position:absolute;left:0;right:0;bottom:-1px;height:3px;overflow:hidden;pointer-events:none}
 .ss-timer i{display:block;height:100%;background:var(--blue);transform-origin:0 50%;transform:scaleX(0)}
@@ -2145,7 +2145,7 @@ footer .ftop{display:inline-flex;align-items:center;gap:6px;color:var(--ink);tex
 footer .ftop:hover{color:var(--blue)}
 footer .ftop svg{flex:none}
 /* the page offers kiosk mode only on wide screens (its hero button hides below 900px), so the footer entry follows */
-@media(max-width:899px){footer .fk{display:none}}
+@media (max-width:899px),(pointer:coarse) and (max-height:520px){footer .fk{display:none}}
 @media(min-width:600px){footer .fcols{grid-template-columns:repeat(2,max-content);column-gap:72px}}
 @media(min-width:1000px){footer .fgrid{grid-template-columns:minmax(0,1fr) auto}footer .fbar{grid-column:1/-1}}
 /* dark: the footer bookends the header */
@@ -4981,7 +4981,7 @@ dlg.addEventListener('close',function(){st.innerHTML='';show(zi);op.focus({preve
   if(hn){var cb=document.createElement('button');cb.type='button';cb.className='conf-btn';cb.innerHTML=IC.play+'<span>OpenText World 2026 Kiosk Mode</span>';
     cb.title='Runs every generally available capability and scenario on a loop';cb.addEventListener('click',function(){open(confDeck(),0,cb);});hn.appendChild(cb);}
   var ch=/^#conference(?:-([123])x)?$/.exec(location.hash);
-  if(ch){if(ch[1])speed=+ch[1];setTimeout(function(){open(confDeck(),0,null);},300);}
+  if(ch&&!(window.matchMedia&&matchMedia('(max-width:899px),(pointer:coarse) and (max-height:520px)').matches)){if(ch[1])speed=+ch[1];setTimeout(function(){open(confDeck(),0,null);},300);}
 })();
 </script>
 <script>
