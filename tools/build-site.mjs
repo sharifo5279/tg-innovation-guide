@@ -61,7 +61,7 @@ function product(id) {
   if (tag === "section") {
     const stop = html.indexOf("<section", i + 1), part = html.slice(i, stop > 0 ? stop : undefined);
     const h = part.match(/<h2[^>]*>([\s\S]*?)<\/h2>/), sm = part.match(/<p class="sec-sum">([\s\S]*?)<\/p>/);
-    const name = h ? ent(h[1]) : id; return { name, title: name, desc: "Generally available. " + brief(sm ? ent(sm[1]) : GUIDE_DESC) };
+    const pv = part.match(/<span class="ga pv">([\s\S]*?)<\/span>/), name = h ? ent(h[1]) : id; return { name, title: name, desc: (pv ? ent(pv[1]) : "Generally available") + ". " + brief(sm ? ent(sm[1]) : GUIDE_DESC) };
   }
   const part = html.slice(i, html.indexOf("</article>", i));
   const lb = part.match(/<div class="label lbl">([\s\S]*?)<\/div>/), h = part.match(/<h3[^>]*>([\s\S]*?)<\/h3>/), st = part.match(/<span class="ga pv">([\s\S]*?)<\/span>/), dk = part.match(/<p class="deck">([\s\S]*?)<\/p>/);

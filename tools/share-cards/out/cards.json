@@ -63,6 +63,32 @@
   "name": "Core Collaboration Access",
   "screens": []
  },
+ "quick-connect": {
+  "id": "ga-quick-connect",
+  "name": "Trading Grid Quick Connect",
+  "screens": []
+ },
+ "community-manager": {
+  "id": "ga-community-manager",
+  "name": "Community Manager",
+  "screens": [
+   "img/2026-h2/tgcm-community.webp"
+  ]
+ },
+ "community-projects": {
+  "id": "ga-community-projects",
+  "name": "Trading Grid Community Projects",
+  "screens": [
+   "img/2026-h2/tgcp-requests.webp"
+  ]
+ },
+ "partner-hub": {
+  "id": "ga-partner-hub",
+  "name": "Partner Hub",
+  "screens": [
+   "img/2026-h2/tgph-partner-view.webp"
+  ]
+ },
  "cartographer": {
   "id": "tg-cartographer",
   "name": "Trading Grid Cartographer",

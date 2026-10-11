@@ -52,7 +52,7 @@ function productCard(p, d) {
   const pos = n >= 3 ? [[752, 300, 540, 304], [792, 172, 520, 292], [832, 48, 500, 281]] : n === 2 ? [[752, 266, 560, 315], [812, 82, 540, 304]] : [[752, 116, 600, 400]];
   const shots = p.screens.slice(0, n).map((src, i) => { const [x, y, w, h] = pos[i]; return `<div class="shot${i === 0 ? " hero" : ""}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;z-index:${5 - i}"><img src="${src}"></div>`; }).join("");
   const art = n === 0 ? `<div class="art">${d.art.replace('class="art"', 'class="na"').replace(/stroke="#fff"/g, 'stroke="#0066FF"').replace(/fill="#fff"/g, 'fill="#0066FF"')}</div>` : "";
-  const stage = p.ga ? `<span class="st ga">Generally available</span>` : `<span class="k">Looking ahead</span>${p.status ? `<span class="st">${esc(p.status)}</span>` : ""}`;
+  const stage = p.ga ? (p.status ? `<span class="st">${esc(p.status)}</span>` : `<span class="st ga">Generally available</span>`) : `<span class="k">Looking ahead</span>${p.status ? `<span class="st">${esc(p.status)}</span>` : ""}`;
   const w = n ? 430 : 600;
   return `<style>${BASE}
 body{background:#F6F7F7;color:#3F4D62}
@@ -99,7 +99,7 @@ const data = await page.evaluate(() => {
     if (ga) { for (const a of el.querySelectorAll("article.inn")) { const im = [...a.querySelectorAll("figure img")].find(big); if (im && !screens.includes(abs(im))) screens.push(abs(im)); if (screens.length === 3) break; } }
     else screens = [...new Set([...el.querySelectorAll("figure img")].filter(big).map(abs))].slice(0, 3);
     const name = txt(el.querySelector(ga ? "h2" : "h3")), fam = ga ? "" : txt(el.querySelector(".lbl"));
-    d.products.push({ id, slug, ga, name, family: fam && fam !== name ? fam : "", status: ga ? "" : txt(el.querySelector(".ttl .ga.pv")), sum: txt(el.querySelector(ga ? ".sec-sum" : ".deck")), screens: screens.filter(Boolean) });
+    d.products.push({ id, slug, ga, name, family: fam && fam !== name ? fam : "", status: txt(el.querySelector(ga ? "article.inn .ttl .ga.pv" : ".ttl .ga.pv")), sum: txt(el.querySelector(ga ? ".sec-sum" : ".deck")), screens: screens.filter(Boolean) });
   }
   return d;
 });
