@@ -82,13 +82,6 @@
    "img/2026-h2/tgcp-requests.webp"
   ]
  },
- "partner-hub": {
-  "id": "ga-partner-hub",
-  "name": "Partner Hub",
-  "screens": [
-   "img/2026-h2/tgph-partner-view.webp"
-  ]
- },
  "cartographer": {
   "id": "tg-cartographer",
   "name": "Trading Grid Cartographer",
@@ -122,6 +115,14 @@
   "screens": [
    "img/2026-h2/tgsh-packing-hierarchy.webp",
    "img/2026-h2/tgsh-packing-lines.webp"
+  ]
+ },
+ "partner-hub": {
+  "id": "pv-tgph",
+  "name": "Faster, more transparent partner onboarding",
+  "screens": [
+   "img/2026-h2/tgph-partner-view.webp",
+   "img/2026-h2/tgph-program.webp"
   ]
  },
  "decisions-intelligence": {
