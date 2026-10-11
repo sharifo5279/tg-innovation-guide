@@ -119,7 +119,7 @@
  },
  "partner-hub": {
   "id": "pv-tgph",
-  "name": "Faster, more transparent partner onboarding",
+  "name": "Partner Hub",
   "screens": [
    "img/2026-h2/tgph-partner-view.webp",
    "img/2026-h2/tgph-program.webp"
