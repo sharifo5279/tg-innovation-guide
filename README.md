@@ -44,6 +44,9 @@ Link previews (Messages, Teams, WhatsApp, LinkedIn):
 - Apps cache previews per link. LinkedIn's Post Inspector refreshes its copy; the card image URLs carry a content hash,
   so a new card is fetched once the app reads the page again.
 
+Clickable prototypes: each folder in `prototypes/` is published as-is at `/<folder>/` (Trading Grid ASN Intelligence at
+`/asn-intelligence/`, linked from its Looking ahead entry; opens in a new tab).
+
 Build:
 
 ```

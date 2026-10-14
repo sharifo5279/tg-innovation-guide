@@ -132,4 +132,12 @@ if (gh < 0) throw new Error("no </head> in game");
 game = game.slice(0, gh) + PLAYED + game.slice(gh);
 fs.mkdirSync(path.join(ROOT, "site/play"), { recursive: true });
 fs.writeFileSync(path.join(ROOT, "site/play/index.html"), game);
+
+// Clickable prototypes (owner, Oct 14): each folder in prototypes/ is published as-is at /<folder>/
+const PROTO = path.join(ROOT, "prototypes");
+if (fs.existsSync(PROTO)) for (const d of fs.readdirSync(PROTO)) {
+  const to = path.join(ROOT, "site", d);
+  if (fs.existsSync(to)) throw new Error("prototype folder clashes with the site: " + d);
+  fs.cpSync(path.join(PROTO, d), to, { recursive: true });
+}
 console.log("site/index.html", (html.length / 1024).toFixed(0) + " KB;", refs.size, "images,", (bytes / 1048576).toFixed(1), "MB; stats page reads", API, "; Grid Runner at /play/");
