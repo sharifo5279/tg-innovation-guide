@@ -28,12 +28,16 @@
  "compliance-link": {
   "id": "ga-compliance-link",
   "name": "Trading Grid Intelligence: Compliance Link",
-  "screens": []
+  "screens": [
+   "img/2026-h2/tgicl-surveys.webp"
+  ]
  },
  "chargeback-deductions": {
   "id": "ga-chargeback-deductions",
-  "name": "Trading Grid Intelligence: Chargeback & Deductions",
-  "screens": []
+  "name": "Trading Grid Intelligence: Deductions Management",
+  "screens": [
+   "img/2026-h2/tgidm-monitor.webp"
+  ]
  },
  "e-invoicing": {
   "id": "ga-e-invoicing-navigator",
@@ -154,9 +158,9 @@
  },
  "aviator-studio": {
   "id": "pv-avstudio",
-  "name": "Aviator Studio",
+  "name": "OpenText Aviator Studio",
   "screens": [
-   "img/2026-h2/avstudio-concept.webp"
+   "img/2026-h2/avstudio-concept-2.webp"
   ]
  },
  "aviator-roadmap": {
