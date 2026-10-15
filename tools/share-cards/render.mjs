@@ -99,7 +99,7 @@ const data = await page.evaluate(() => {
     if (ga) { for (const a of el.querySelectorAll("article.inn")) { const im = [...a.querySelectorAll("figure img")].find(big); if (im && !screens.includes(abs(im))) screens.push(abs(im)); if (screens.length === 3) break; } }
     else screens = [...new Set([...el.querySelectorAll("figure img")].filter(big).map(abs))].slice(0, 3);
     const name = txt(el.querySelector(ga ? "h2" : "h3")), fam = ga ? "" : txt(el.querySelector(".lbl"));
-    d.products.push({ id, slug, ga, name, family: fam && fam !== name ? fam : "", status: txt(el.querySelector(ga ? "article.inn .ttl .ga.pv" : ".ttl .ga.pv")), sum: txt(el.querySelector(ga ? ".sec-sum" : ".deck")), screens: screens.filter(Boolean) });
+    d.products.push({ id, slug, ga, name, family: fam && fam !== name && !fam.includes(name) ? fam : "", status: txt(el.querySelector(ga ? "article.inn .ttl .ga.pv" : ".ttl .ga.pv")), sum: txt(el.querySelector(ga ? ".sec-sum" : ".deck")), screens: screens.filter(Boolean) });
   }
   return d;
 });

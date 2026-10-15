@@ -66,7 +66,7 @@ function product(id) {
   const part = html.slice(i, html.indexOf("</article>", i));
   const lb = part.match(/<div class="label lbl">([\s\S]*?)<\/div>/), h = part.match(/<h3[^>]*>([\s\S]*?)<\/h3>/), st = part.match(/<span class="ga pv">([\s\S]*?)<\/span>/), dk = part.match(/<p class="deck">([\s\S]*?)<\/p>/);
   const name = h ? ent(h[1]) : id, lbl = lb ? ent(lb[1]) : "";
-  return { name, title: lbl && lbl !== name ? `${lbl}: ${name}` : name, desc: "Looking ahead" + (st ? ", " + ent(st[1]) : "") + ". " + brief(dk ? ent(dk[1]) : GUIDE_DESC) };
+  return { name, title: lbl && lbl !== name ? (lbl.includes(name) ? lbl : `${lbl}: ${name}`) : name, desc: "Looking ahead" + (st ? ", " + ent(st[1]) : "") + ". " + brief(dk ? ent(dk[1]) : GUIDE_DESC) };
 }
 const sharePages = [];
 if (SHARE) {

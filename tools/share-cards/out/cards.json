@@ -152,6 +152,13 @@
    "img/2026-h2/tgcs-offers.png"
   ]
  },
+ "aviator-studio": {
+  "id": "pv-avstudio",
+  "name": "Aviator Studio",
+  "screens": [
+   "img/2026-h2/avstudio-concept.webp"
+  ]
+ },
  "aviator-roadmap": {
   "id": "pv-tga",
   "name": "Trading Grid Aviator",
