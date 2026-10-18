@@ -5,8 +5,8 @@ Two Render services built from this repo:
 | Service | Type | What it serves |
 |---|---|---|
 | `tg-innovation-guide` | Static site, publish directory `site` | The guide (`site/index.html`), its images, the visitor stats page (`site/stats/`) and Grid Runner, the Trading Grid game (`site/play/`) |
-| `tg-guide-stats` | Node web service, `node server/index.mjs` | `POST /api/hit` (one open of the guide), `POST /api/play` (one Grid Runner run started), `GET /api/stats?days=1..90`, `GET /healthz` |
-| `tg-guide-stats-db` | Render Postgres | Table `visits`, one row per open; table `plays`, one row per run started |
+| `tg-guide-stats` | Node web service, `node server/index.mjs` | `POST /api/hit` (one open of the guide), `POST /api/play` (one Grid Runner run started), `POST /api/event` (one product event), `GET /api/stats?days=1..90`, `GET /healthz` |
+| `tg-guide-stats-db` | Render Postgres | Table `visits`, one row per open; table `plays`, one row per run started; table `product_events`, one row per product event |
 
 Master copy of the guide: the claude.ai artifact. Master copy of the game: `game/gridrunner.html` (the owner's
 GRIDRUNNERkiosk.html with invented partner names, since the guide never names clients, and a hook in `startRun()`).
@@ -66,7 +66,14 @@ API_ORIGIN=https://tg-guide-stats.onrender.com node tools/build-site.mjs /path/t
    `/api/stats` adds `plays` (runs started) and `players` (visitor ids) to each day; the stats page shows them in its
    Grid Runner card.
 
-`?test=1` on the API routes uses tables `visits_test` and `plays_test`, for checks that must not touch the real counts.
+6. Products (since Oct 18, 2026): each product in the master's `script#tg-share` (Generally available sections and Looking
+   ahead entries) reports to `API_ORIGIN/api/event`, at most once per open of the guide: `view` after 3 seconds in the
+   middle band of the screen, `act` when a screenshot, link or control inside it is used, `link` when the guide opens at
+   it. Nothing is reported while presenting or in the capability peek. Same visitor id and place rules as opens.
+   `/api/stats` adds `products.days` ([day, product, people, views, interactions, link opens]) and `products.places`
+   ([day, product, country, people]); the stats page lists the products by group, in page order from the build.
+
+`?test=1` on the API routes uses tables `visits_test`, `plays_test` and `product_events_test`, for checks that must not touch the real counts.
 
 ## Environment (web service)
 - `DATABASE_URL`: the database's Internal Database URL (set in the Render dashboard; never committed)

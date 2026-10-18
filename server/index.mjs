@@ -1,7 +1,8 @@
 // Visitor stats service for the H2 2026 Trading Grid Innovation Guide (Render web service).
 //   POST /api/hit              the guide page reports one open (navigator.sendBeacon); 204
 //   POST /api/play             Grid Runner, the Trading Grid game at /play/, reports one run started; 204
-//   GET  /api/stats?days=1..90 daily opens, visitors, places and Grid Runner plays and players, newest last (public by the owner's choice)
+//   POST /api/event            the guide page reports one product event, body {"p": product id, "k": "view" | "act" | "link"}; 204
+//   GET  /api/stats?days=1..90 daily opens, visitors, places, Grid Runner plays and players, and per-product counts, newest last (public by the owner's choice)
 //   GET  /healthz              liveness for Render
 // ?test=1 on both API routes uses a separate table, so the pipeline can be checked without touching the real counts.
 // Location comes from the open DB-IP Lite city database (CC BY 4.0), looked up in memory; the IP itself is never stored.
@@ -11,7 +12,7 @@ import crypto from "node:crypto";
 import { createRequire } from "node:module";
 import pg from "pg";
 import maxmind from "maxmind";
-import { MAX_DAYS, isBot, utcDay, addDays, sha256hex, place, summarizeDay, addPlays, clientIp } from "./visits.mjs";
+import { MAX_DAYS, isBot, utcDay, addDays, sha256hex, place, summarizeDay, addPlays, clientIp, parseEvent } from "./visits.mjs";
 
 const PORT = +(process.env.PORT || 10000);
 const ORIGINS = (process.env.ALLOWED_ORIGINS || "").split(",").map((s) => s.trim()).filter(Boolean);
@@ -34,6 +35,11 @@ async function migrate() {
       region text not null default '', city text not null default '', vid text not null, ts timestamptz not null default now());
     create index if not exists plays_day on plays (day);
     create table if not exists plays_test (like plays including all);
+    create table if not exists product_events (id bigserial primary key, day date not null, cc char(2) not null,
+      region text not null default '', city text not null default '', vid text not null, product text not null, kind text not null,
+      ts timestamptz not null default now());
+    create index if not exists product_events_day on product_events (day);
+    create table if not exists product_events_test (like product_events including all);
     create table if not exists salts (day date primary key, salt text not null);
     create table if not exists imports (source text primary key, digest text not null, at timestamptz not null default now());`);
   await importNetlifyHistory();
@@ -78,12 +84,12 @@ async function dailySalt(day) {
   return saltCache.salt;
 }
 
-// a single address cannot flood the counts: 30 opens a minute at most
+// a single address cannot flood the counts: 30 opens a minute at most (240 product events, since one open reports several)
 const hits = new Map();
-function limited(ip) {
+function limited(ip, max = 30) {
   const now = Date.now(), w = hits.get(ip);
   if (!w || now - w.t > 60000) { hits.set(ip, { t: now, n: 1 }); return false; }
-  return ++w.n > 30;
+  return ++w.n > max;
 }
 setInterval(() => { const now = Date.now(); for (const [k, w] of hits) if (now - w.t > 60000) hits.delete(k); }, 60000).unref();
 
@@ -94,22 +100,32 @@ function send(res, status, body, headers = {}) {
   res.end(json);
 }
 
-// one guide open (kind "visits") or one Grid Runner run started (kind "plays"), same rules for both
+// the beacon body, at most 1 KB
+async function body(req) {
+  let s = "";
+  for await (const c of req) { if (s.length < 1024) s += c; }
+  return s.slice(0, 1024);
+}
+
+// one guide open (kind "visits"), one Grid Runner run started (kind "plays") or one product event (kind "product_events"),
+// same rules for all three
 async function hit(req, res, url, geo4, geo6, kind) {
   const ua = req.headers["user-agent"] || "", origin = req.headers.origin || "";
-  // drain the tiny beacon body
-  for await (const _ of req) { /* ignore */ }
+  const text = await body(req);
   if (isBot(ua)) return send(res, 204, undefined, cors(origin));
   // only the guide's own pages may report opens
   if (origin && !ORIGINS.includes(origin)) return send(res, 403);
+  const ev = kind === "product_events" ? parseEvent(text) : null;
+  if (kind === "product_events" && !ev) return send(res, 400, { error: "unknown product event" }, cors(origin));
   const ip = clientIp(req.headers, req.socket.remoteAddress);
-  if (limited(kind + "|" + ip)) return send(res, 429, undefined, cors(origin));
+  if (limited(kind + "|" + ip, ev ? 240 : 30)) return send(res, 429, undefined, cors(origin));
   const day = utcDay(), salt = await dailySalt(day);
   const vid = sha256hex(salt + "|" + ip + "|" + ua).slice(0, 16);
   let g = null; try { g = (ip.includes(":") ? geo6 : geo4).get(ip.replace(/^::ffff:/, "")); } catch (e) { g = null; }
-  const p = place(g), test = url.searchParams.get("test") === "1";
-  await pool.query(`insert into ${test ? kind + "_test" : kind} (day, cc, region, city, vid) values ($1, $2, $3, $4, $5)`, [day, p.cc, p.region, p.city, vid]);
-  if (test) return send(res, 200, { stored: [day, p.cc, p.region, p.city] }, cors(origin));
+  const p = place(g), test = url.searchParams.get("test") === "1", table = test ? kind + "_test" : kind;
+  if (ev) await pool.query(`insert into ${table} (day, cc, region, city, vid, product, kind) values ($1, $2, $3, $4, $5, $6, $7)`, [day, p.cc, p.region, p.city, vid, ev.product, ev.kind]);
+  else await pool.query(`insert into ${table} (day, cc, region, city, vid) values ($1, $2, $3, $4, $5)`, [day, p.cc, p.region, p.city, vid]);
+  if (test) return send(res, 200, { stored: [day, p.cc, p.region, p.city, ...(ev ? [ev.product, ev.kind] : [])] }, cors(origin));
   return send(res, 204, undefined, cors(origin));
 }
 
@@ -123,7 +139,18 @@ async function stats(req, res, url) {
   const played = await pool.query(
     `select to_char(day, 'YYYY-MM-DD') as day, count(*) as plays, count(distinct vid) as players from ${test ? "plays_test" : "plays"} where day >= $1 and day <= $2 group by day`, [from, today]);
   const days = addPlays(Array.from({ length: n }, (_, i) => addDays(from, i)).map((d) => summarizeDay(d, byDay.get(d) || [])), played.rows);
-  send(res, 200, { generated: new Date().toISOString(), timezone: "UTC", days }, { "access-control-allow-origin": "*", "cache-control": "public, max-age=30" });
+  // per product and day: people (visitor ids), views, interactions, direct link opens; and people per country
+  const pe = test ? "product_events_test" : "product_events";
+  const [pd, pp] = await Promise.all([
+    pool.query(`select to_char(day, 'YYYY-MM-DD') as day, product, count(distinct vid) as people, count(*) filter (where kind = 'view') as views,
+      count(*) filter (where kind = 'act') as acts, count(*) filter (where kind = 'link') as links from ${pe} where day >= $1 and day <= $2 group by day, product`, [from, today]),
+    pool.query(`select to_char(day, 'YYYY-MM-DD') as day, product, cc, count(distinct vid) as people from ${pe} where day >= $1 and day <= $2 group by day, product, cc`, [from, today]),
+  ]);
+  const products = {
+    days: pd.rows.map((r) => [r.day, r.product, +r.people, +r.views, +r.acts, +r.links]),
+    places: pp.rows.map((r) => [r.day, r.product, r.cc, +r.people]),
+  };
+  send(res, 200, { generated: new Date().toISOString(), timezone: "UTC", days, products }, { "access-control-allow-origin": "*", "cache-control": "public, max-age=30" });
 }
 
 let dbReady = false;
@@ -145,6 +172,7 @@ async function main() {
       if (url.pathname.startsWith("/api/") && !dbReady) return send(res, 503, { error: "stats database not ready" }, { "access-control-allow-origin": "*" });
       if (url.pathname === "/api/hit" && req.method === "POST") return await hit(req, res, url, geo4, geo6, "visits");
       if (url.pathname === "/api/play" && req.method === "POST") return await hit(req, res, url, geo4, geo6, "plays");
+      if (url.pathname === "/api/event" && req.method === "POST") return await hit(req, res, url, geo4, geo6, "product_events");
       if (url.pathname === "/api/stats" && req.method === "GET") return await stats(req, res, url);
       if (url.pathname === "/healthz") return send(res, 200, { ok: true, database: dbReady });
       return send(res, 404, { error: "not found" });

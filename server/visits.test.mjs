@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { isBot, utcDay, addDays, place, summarizeDay, addPlays, clientIp } from "./visits.mjs";
+import { isBot, utcDay, addDays, place, summarizeDay, addPlays, clientIp, parseEvent } from "./visits.mjs";
 
 test("bots and empty agents are skipped", () => {
   assert.equal(isBot(""), true);
@@ -33,4 +33,11 @@ test("Grid Runner plays join the day summaries", () => {
   const out = addPlays(days, [{ day: "2026-10-09", plays: "5", players: "2" }]);
   assert.deepEqual([out[0].plays, out[0].players, out[1].plays, out[1].players], [0, 0, 5, 2]);
   assert.equal(out[1].opens, 0);
+});
+test("product events are validated", () => {
+  assert.deepEqual(parseEvent('{"p":"pv-tgcs","k":"view"}'), { product: "pv-tgcs", kind: "view" });
+  assert.equal(parseEvent('{"p":"pv-tgcs","k":"click"}'), null);
+  assert.equal(parseEvent('{"p":"PV tgcs","k":"view"}'), null);
+  assert.equal(parseEvent("not json"), null);
+  assert.equal(parseEvent(""), null);
 });

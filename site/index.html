@@ -5334,4 +5334,15 @@ dlg.addEventListener('close',function(){st.innerHTML='';show(zi);op.focus({preve
     copy(t);
   });});
 })();</script>
-<script>/* count one open of the guide: no cookies, see /stats/ */(function(){try{if(navigator.webdriver||location.protocol!=="https:")return;var u="https://tg-guide-stats.onrender.com/api/hit",b=new Blob(["{}"],{type:"text/plain"});if(!(navigator.sendBeacon&&navigator.sendBeacon(u,b)))fetch(u,{method:"POST",body:"{}",keepalive:true,mode:"no-cors"});}catch(e){}})();</script></body></html>
+
+<script>/* count one open of the guide: no cookies, see /stats/ */(function(){try{if(navigator.webdriver||location.protocol!=="https:")return;var u="https://tg-guide-stats.onrender.com/api/hit",b=new Blob(["{}"],{type:"text/plain"});if(!(navigator.sendBeacon&&navigator.sendBeacon(u,b)))fetch(u,{method:"POST",body:"{}",keepalive:true,mode:"no-cors"});}catch(e){}})();</script><script>/* product views and interactions: no cookies, see /stats/ */(function(){try{if(navigator.webdriver||location.protocol!=="https:"||!window.IntersectionObserver)return;
+var U="https://tg-guide-stats.onrender.com/api/event",IDS=["command-center","tg-insights","ga-supplier-hub","ga-compliance-link","ga-chargeback-deductions","ga-e-invoicing-navigator","tg-aviator","ga-aviator-iot","ga-core-collaboration-access","ga-quick-connect","ga-community-manager","ga-community-projects","tg-cartographer","pv-ccpm","pv-tgasn","pv-tgsh","pv-tgph","pv-tgi-jato","pv-tgdi","pv-tgde","pv-tgcs","pv-avstudio","pv-tga"],sent={},tm={},on={},de=document.documentElement;
+function send(p,k){if(sent[p+k])return;sent[p+k]=1;var d=JSON.stringify({p:p,k:k});try{if(!(navigator.sendBeacon&&navigator.sendBeacon(U,new Blob([d],{type:"text/plain"}))))fetch(U,{method:"POST",body:d,keepalive:true,mode:"no-cors"});}catch(e){}}
+function own(n){for(;n&&n.nodeType===1;n=n.parentNode)if(n.id&&IDS.indexOf(n.id)>=0)return n.id;return null;}
+function busy(){return de.classList.contains("ss-on")||de.classList.contains("pk-on")||document.visibilityState!=="visible";}
+function arm(id){clearTimeout(tm[id]);tm[id]=setTimeout(function(){if(!on[id])return;if(busy())arm(id);else send(id,"view");},3000);}
+var io=new IntersectionObserver(function(es){es.forEach(function(e){var id=e.target.id;on[id]=e.isIntersecting;if(sent[id+"view"])return;if(on[id])arm(id);else clearTimeout(tm[id]);});},{rootMargin:"-30% 0px -30% 0px",threshold:0});
+IDS.forEach(function(id){var n=document.getElementById(id);if(n)io.observe(n);});
+document.addEventListener("click",function(e){var t=e.target&&e.target.closest&&e.target.closest("a,button,summary,img,video,[role=button]");var id=t&&own(t);if(id)send(id,"act");},true);
+var h=location.hash.slice(1);if(h){try{h=decodeURIComponent(h);}catch(e){}var id=own(document.getElementById(h));if(id)send(id,"link");}
+}catch(e){}})();</script></body></html>

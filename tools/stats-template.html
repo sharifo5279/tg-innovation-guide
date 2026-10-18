@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Innovation Guide Visitors</title>
-<meta name="description" content="Daily visitor counts and locations for the H2 2026 Trading Grid Innovation Guide.">
+<meta name="description" content="Daily visitor counts, product interest and locations for the H2 2026 Trading Grid Innovation Guide.">
 <meta name="robots" content="noindex">
 <script>try{if(localStorage.getItem("dvi-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -89,6 +89,23 @@ td.sh{width:28%;padding-left:14px}
 .gr-n{display:flex;flex-wrap:wrap;gap:8px 32px;margin:12px 0 0}
 .gr-n .v{display:block;margin-top:2px;color:var(--ink);font:700 20px/26px Inter,Arial,sans-serif;letter-spacing:-.015em;font-variant-numeric:tabular-nums}
 .gr-n .n{display:block;font-size:13px;line-height:18px;color:var(--muted)}
+/* products (owner, Oct 18) */
+.p-hd{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:12px 24px}
+#tb-p th:first-child{width:auto}
+#tb-p tr.pr{cursor:pointer}
+#tb-p tr.pr:hover td.pn .nm,#tb-p tr.pr.open td.pn .nm{color:var(--blue)}
+#tb-p td.pn{color:var(--ink)}
+#tb-p td.pn button{appearance:none;border:0;background:none;padding:0;margin:0;display:flex;align-items:flex-start;gap:8px;text-align:left;font:inherit;color:inherit;cursor:pointer;width:100%}
+#tb-p .nm{display:block;font-weight:600}
+#tb-p .ds{display:block;font-size:12px;line-height:16px;color:var(--muted)}
+#tb-p .chev{flex:none;margin-top:6px;width:7px;height:7px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .15s}
+#tb-p tr.open .chev{transform:rotate(45deg);margin-top:4px}
+#tb-p td.num.pp{color:var(--ink);font-weight:700}
+#tb-p tr.dt>td{padding:4px 0 20px;background:none}
+.pd-loc{margin:6px 0 0;font-size:14px;line-height:22px}
+.pd-loc .fl{display:inline-block;width:20px}
+@media(max-width:420px){#tb-p .pv{display:none}}
+@media(prefers-reduced-motion:reduce){#tb-p .chev{transition:none}}
 .foot{margin:40px 0 0;padding:24px 0 40px;border-top:1px solid var(--line);font-size:14px;line-height:21px;color:var(--muted)}
 .foot p{margin:0 0 8px;max-width:820px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -101,7 +118,7 @@ td.sh{width:28%;padding-left:14px}
 </div></header>
 <main class="wrap">
   <h1>Who is reading the guide</h1>
-  <p class="sum">Daily counts of people opening the H2 2026 Trading Grid Innovation Guide, where they are opening it from, and how many played Grid Runner, the Trading Grid game.</p>
+  <p class="sum">Daily counts of people opening the H2 2026 Trading Grid Innovation Guide, the products they view and use, where they are opening it from, and how many played Grid Runner, the Trading Grid game.</p>
 
   <div class="bar">
     <div class="seg" role="group" aria-label="Period">
@@ -118,6 +135,17 @@ td.sh{width:28%;padding-left:14px}
     <div class="tile"><span class="label">Opens</span><span class="v" id="t-opn">0</span><span class="n">Every time the guide is opened</span></div>
     <div class="tile"><span class="label">Countries</span><span class="v" id="t-cty">0</span><span class="n" id="t-cty-n">Where visitors were</span></div>
     <div class="tile"><span class="label">Cities</span><span class="v" id="t-cit">0</span><span class="n" id="t-cit-n">Approximate, from the network</span></div>
+  </section>
+
+  <section class="card" aria-labelledby="h-p">
+    <div class="p-hd">
+      <div><h2 id="h-p">Products</h2><p class="sub" id="p-sub">People who viewed or used each product</p></div>
+      <div class="seg" role="group" aria-label="Product group">
+        <button type="button" data-g="ga" aria-pressed="true">Generally available</button>
+        <button type="button" data-g="la" aria-pressed="false">Looking ahead</button>
+      </div>
+    </div>
+    <table id="tb-p"><thead><tr><th>Product</th><th class="num">People</th><th class="num pv">Views</th><th class="num">Interactions</th><th class="sh"><span class="sr">Share of people</span></th></tr></thead><tbody></tbody></table>
   </section>
 
   <section class="card" aria-labelledby="h-daily">
@@ -158,13 +186,14 @@ td.sh{width:28%;padding-left:14px}
   <footer class="foot">
     <p><b>Counts only.</b> No cookies, names, email addresses or IP addresses are stored. A visitor is recognized only within one day (UTC), through a daily key that is deleted when the day ends, so the same person on two days counts twice and cannot be followed across days.</p>
     <p>Locations are looked up from the visitor's network address in the open <a href="https://db-ip.com">DB-IP</a> Lite city database (CC BY 4.0) and are approximate, often the nearest large city or the location of a company network or VPN. The address itself is never stored. Crawlers and link previews are not counted. Days run on UTC.</p>
+    <p><b>Products.</b> A view is a product on screen for 3 seconds. An interaction is a screenshot, link or control used inside the product. A direct link open is an open of the guide that starts at the product, usually from a shared link. Each is counted at most once per open of the guide; people are counted once a day per product. Presenting and kiosk mode are not counted. Product counts start October 18, 2026.</p>
     <p>Grid Runner plays are counted the same way: one record each time a run starts, with the same daily key, so a player is each person once a day.</p>
   </footer>
 </main>
 <script>
 (function(){
   var $=function(s,r){return (r||document).querySelector(s);},$$=function(s,r){return [].slice.call((r||document).querySelectorAll(s));};
-  var DATA=null,RANGE=30,SHOW={c:false,t:false};
+  var DATA=null,RANGE=30,SHOW={c:false,t:false},PRODUCTS=__PRODUCTS__,GROUP='ga',OPEN={},PSTART='2026-10-18';
   var nf=new Intl.NumberFormat('en-US');
   var regionName=(function(){try{var d=new Intl.DisplayNames(['en'],{type:'region'});return function(cc){if(cc==='XX')return 'Unknown';try{return d.of(cc)||cc;}catch(e){return cc;}};}catch(e){return function(cc){return cc==='XX'?'Unknown':cc;};}})();
   function flag(cc){if(!/^[A-Z]{2}$/.test(cc)||cc==='XX')return '';return String.fromCodePoint.apply(null,cc.split('').map(function(c){return 0x1F1E6+c.charCodeAt(0)-65;}));}
@@ -196,19 +225,57 @@ td.sh{width:28%;padding-left:14px}
     $('#t-cty-n').textContent=pl.countries[0]&&pl.countries[0].cc!=='XX'?'Most from '+regionName(pl.countries[0].cc):'Where visitors were';
     $('#t-cit-n').textContent=pl.cities[0]?'Most from '+pl.cities[0].city:'Approximate, from the network';
     var win=DATA.days.slice(Math.max(0,DATA.days.length-Math.max(RANGE,7)));
-    chart('#chart',win,{bar:'visitors',line:'opens',bl:'visitors',ll:'opens',aria:'Visitors and opens per day'});
+    chart('#chart',win,{bar:'visitors',line:'opens',bl:'visitors',ll:'opens',b1:'visitor',l1:'open',aria:'Visitors and opens per day'});
     var ply=0,run=0;days.forEach(function(d){ply+=d.players;run+=d.plays;});
     $('#g-ply').textContent=nf.format(ply);$('#g-run').textContent=nf.format(run);
     var gb=$('#gchart'),ge=$('.empty',gb.parentNode),any=win.some(function(d){return d.plays>0;});if(ge)ge.remove();
     gb.hidden=!any;$('.legend',gb.parentNode).hidden=!any;
-    if(any)chart('#gchart',win,{bar:'players',line:'plays',bl:'players',ll:'plays',aria:'Grid Runner players and plays per day',h:160});
+    if(any)chart('#gchart',win,{bar:'players',line:'plays',bl:'players',ll:'plays',b1:'player',l1:'play',aria:'Grid Runner players and plays per day',h:160});
     else gb.parentNode.insertBefore(el('p','empty',RANGE===1?'No plays yet today.':'No plays in this period yet.'),gb);
     var gt=$('#g-table tbody');gt.textContent='';days.slice().reverse().forEach(function(d){var tr=el('tr');tr.appendChild(el('td',null,fmtDay(d.date,true)));tr.appendChild(el('td',null,nf.format(d.players)));tr.appendChild(el('td',null,nf.format(d.plays)));gt.appendChild(tr);});
     $('#g-sub').textContent='The Trading Grid game: '+(RANGE===1?'today and the 6 days before, ':'last '+RANGE+' days, ')+'players and plays per day, UTC';
+    products(days,win);
     table('#tb-c',pl.countries,'c',function(x,td){td.appendChild(el('span','fl',flag(x.cc)));td.appendChild(document.createTextNode(regionName(x.cc)));});
     table('#tb-t',pl.cities,'t',function(x,td){td.appendChild(el('span','fl',flag(x.cc)));td.appendChild(document.createTextNode(x.city));td.appendChild(el('span','rg',(x.region?x.region+', ':'')+regionName(x.cc)));});
     var tb=$('#daily-table tbody');tb.textContent='';days.slice().reverse().forEach(function(d){var tr=el('tr');tr.appendChild(el('td',null,fmtDay(d.date,true)));tr.appendChild(el('td',null,nf.format(d.visitors)));tr.appendChild(el('td',null,nf.format(d.opens)));tb.appendChild(tr);});
     $('#daily-sub').textContent=(RANGE===1?'Today and the 6 days before, ':'Last '+RANGE+' days, ')+'visitors and opens per day, UTC';
+  }
+  // per-product totals for the period, a daily series for the chart window, and people by country
+  function productData(days,win){
+    var pr=(DATA.products&&DATA.products.days)||[],pc=(DATA.products&&DATA.products.places)||[],inR={},inW={},by={};
+    days.forEach(function(d){inR[d.date]=1;});win.forEach(function(d,i){inW[d.date]=i;});
+    PRODUCTS.forEach(function(p){by[p.id]={people:0,views:0,acts:0,links:0,cc:{},series:win.map(function(d){return {date:d.date,people:0,views:0};})};});
+    pr.forEach(function(r){var b=by[r[1]];if(!b)return;if(inR[r[0]]){b.people+=r[2];b.views+=r[3];b.acts+=r[4];b.links+=r[5];}if(r[0] in inW){var x=b.series[inW[r[0]]];x.people=r[2];x.views=r[3];}});
+    pc.forEach(function(r){var b=by[r[1]];if(b&&inR[r[0]])b.cc[r[2]]=(b.cc[r[2]]||0)+r[3];});
+    return by;
+  }
+  function products(days,win){
+    var by=productData(days,win),tb=$('#tb-p tbody');tb.textContent='';
+    var list=PRODUCTS.filter(function(p){return p.g===GROUP;}).map(function(p,i){return {p:p,i:i,x:by[p.id]};});
+    list.sort(function(a,b){return b.x.people-a.x.people||b.x.views-a.x.views||a.i-b.i;});
+    var max=Math.max(1,list.length?list[0].x.people:1);
+    list.forEach(function(o){
+      var p=o.p,x=o.x,tr=el('tr','pr'+(OPEN[p.id]?' open':'')),td=el('td','pn'),b=el('button');b.type='button';b.setAttribute('aria-expanded',String(!!OPEN[p.id]));
+      b.appendChild(el('i','chev'));var nm=el('span');nm.appendChild(el('span','nm',p.n));var ds=[p.d,p.s].filter(Boolean).join(' · ');if(ds)nm.appendChild(el('span','ds',ds));b.appendChild(nm);td.appendChild(b);tr.appendChild(td);
+      tr.appendChild(el('td','num pp',nf.format(x.people)));tr.appendChild(el('td','num pv',nf.format(x.views)));tr.appendChild(el('td','num',nf.format(x.acts)));
+      var sh=el('td','sh'),m=el('div','meter'),i=el('i');i.style.width=(x.people?Math.max(2,Math.round(x.people/max*100)):0)+'%';m.appendChild(i);sh.appendChild(m);tr.appendChild(sh);
+      tr.addEventListener('click',function(){OPEN[p.id]=!OPEN[p.id];render();});tb.appendChild(tr);
+      if(!OPEN[p.id])return;
+      var dt=el('tr','dt'),c=el('td');c.colSpan=5;dt.appendChild(c);tb.appendChild(dt);
+      if(x.series.some(function(d){return d.people||d.views;})){
+        var lg=el('div','legend');lg.setAttribute('aria-hidden','true');lg.innerHTML='<span><i class="k1"></i>People</span><span><i class="k2"></i>Views</span>';c.appendChild(lg);
+        var ch=el('div','chart');ch.id='pc-'+p.id;ch.appendChild(el('div','tip'));$('.tip',ch).hidden=true;c.appendChild(ch);
+        // the chart starts when product counts started, so a new product shows its own days, not empty history
+        var ser=x.series.filter(function(d){return d.date>=PSTART;});if(ser.length<7)ser=x.series.slice(-7);
+        chart('#pc-'+p.id,ser,{bar:'people',line:'views',bl:'people',ll:'views',b1:'person',l1:'view',aria:p.n+': people and views per day',h:150});
+        var cc=Object.keys(x.cc).map(function(k){return [k,x.cc[k]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
+        var lc=el('p','pd-loc');lc.appendChild(el('span','label','Direct link opens'));lc.appendChild(document.createTextNode(' '+nf.format(x.links)));
+        if(cc.length){c.appendChild(lc);lc=el('p','pd-loc');lc.appendChild(el('span','label','Locations'));cc.forEach(function(a,j){lc.appendChild(document.createTextNode(j?', ':' '));lc.appendChild(el('span','fl',flag(a[0])));lc.appendChild(document.createTextNode(regionName(a[0])+' '+nf.format(a[1])));});}
+        c.appendChild(lc);
+      } else c.appendChild(el('p','empty',RANGE===1?'No views yet today.':'No views in this period yet.'));
+    });
+    var from=days.length?days[0].date:PSTART;
+    $('#p-sub').textContent='People who viewed or used each product, '+(RANGE===1?'today':'last '+RANGE+' days')+(from<PSTART?'. Counts start Oct 18, 2026':'');
   }
   function table(sel,rows,key,name){
     var tb=$(sel+' tbody'),btn=$('#m-'+key);tb.textContent='';
@@ -237,7 +304,8 @@ td.sh{width:28%;padding-left:14px}
     s.appendChild(svgEl('polyline',{points:pts.map(function(p){return p.join(',');}).join(' '),fill:'none',stroke:css('--s2'),'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
     var last=pts[pts.length-1];s.appendChild(svgEl('circle',{cx:last[0],cy:last[1],r:4,fill:css('--s2'),stroke:css('--white'),'stroke-width':2}));
     var every=Math.ceil(n/(W<560?5:8));days.forEach(function(d,i){if((n-1-i)%every)return;var t=svgEl('text',{x:x(i),y:H-8,'text-anchor':'middle'});t.textContent=fmtDay(d.date);s.appendChild(t);});
-    var dl=svgEl('text',{x:W-m.r,y:4,'text-anchor':'end','class':'dl'});dl.textContent='Today: '+nf.format(days[n-1][k.bar])+' '+k.bl+', '+nf.format(days[n-1][k.line])+' '+k.ll;s.appendChild(dl);
+    var dl=svgEl('text',{x:W-m.r,y:4,'text-anchor':'end','class':'dl'});var lb=function(v,many,one){return nf.format(v)+' '+(v===1?one:many);};
+    dl.textContent='Today: '+lb(days[n-1][k.bar],k.bl,k.b1)+', '+lb(days[n-1][k.line],k.ll,k.l1);s.appendChild(dl);
     var cross=svgEl('line',{y1:m.t,y2:m.t+ih,stroke:css('--muted'),'stroke-width':1,opacity:0}),dot=svgEl('circle',{r:4,fill:css('--s2'),stroke:css('--white'),'stroke-width':2,opacity:0});s.appendChild(cross);s.appendChild(dot);
     var hit=svgEl('rect',{x:m.l,y:m.t,width:iw,height:ih,fill:'transparent',tabindex:0,'aria-label':'Use left and right arrows to read each day'});s.appendChild(hit);
     var cur=n-1;
@@ -252,7 +320,8 @@ td.sh{width:28%;padding-left:14px}
     hit.addEventListener('keydown',function(e){if(e.key==='ArrowLeft'){e.preventDefault();show(Math.max(0,cur-1));}else if(e.key==='ArrowRight'){e.preventDefault();show(Math.min(n-1,cur+1));}});
     box.insertBefore(s,tip);
   }
-  $$('.seg button').forEach(function(b){b.addEventListener('click',function(){RANGE=+b.getAttribute('data-r');$$('.seg button').forEach(function(o){o.setAttribute('aria-pressed',String(o===b));});render();});});
+  $$('[data-r]').forEach(function(b){b.addEventListener('click',function(){RANGE=+b.getAttribute('data-r');$$('[data-r]').forEach(function(o){o.setAttribute('aria-pressed',String(o===b));});render();});});
+  $$('[data-g]').forEach(function(b){b.addEventListener('click',function(){GROUP=b.getAttribute('data-g');$$('[data-g]').forEach(function(o){o.setAttribute('aria-pressed',String(o===b));});render();});});
   $('#m-c').addEventListener('click',function(){SHOW.c=!SHOW.c;render();});$('#m-t').addEventListener('click',function(){SHOW.t=!SHOW.t;render();});
   var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(render,120);});
   load();setInterval(load,60000);

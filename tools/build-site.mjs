@@ -4,6 +4,8 @@
 //    to the stats service (skipped for automated browsers and for non-https pages).
 // 2. site/img/... = every image the page references (src, data-src and CSS url()), copied from the image root.
 // 3. site/stats/index.html = the stats page, reading from the stats service, with the guide's masthead logo.
+//    The guide also reports product events (viewed, used, opened at by a link) for each product in script#tg-share, and
+//    the stats page gets the same product list, in page order, to report them by product.
 // 4. site/play/index.html = Grid Runner, the Trading Grid game (game/gridrunner.html), plus one small script that
 //    reports each run started to the stats service (same rules as the guide's open).
 import fs from "node:fs";
@@ -90,9 +92,40 @@ if (SHARE) {
 }
 
 const BEACON =`<script>/* count one open of the guide: no cookies, see /stats/ */(function(){try{if(navigator.webdriver||location.protocol!=="https:")return;var u=${JSON.stringify(API + "/api/hit")},b=new Blob(["{}"],{type:"text/plain"});if(!(navigator.sendBeacon&&navigator.sendBeacon(u,b)))fetch(u,{method:"POST",body:"{}",keepalive:true,mode:"no-cors"});}catch(e){}})();</script>`;
+// Product analytics (owner, Oct 18). Each product in script#tg-share reports, at most once per open of the guide:
+// "view" after 3 seconds in the middle band of the screen, "act" when a screenshot, link or control inside it is used, and
+// "link" when the guide opens at it (a shared or direct link). Nothing is reported while presenting (slide show, kiosk) or
+// in the capability peek. The stats page lists the same products, Generally available and Looking ahead, in page order.
+const REG = [];
+if (SHARE) {
+  for (const id of Object.keys(SHARE.products)) {
+    const i = html.indexOf(`id="${id}"`), open = html.lastIndexOf("<", i), tag = html.slice(open + 1, html.indexOf(" ", open));
+    if (tag === "section") {
+      const h = html.slice(i, html.indexOf("</h2>", i)).match(/<h2[^>]*>([\s\S]*)/);
+      REG.push({ id, n: h ? ent(h[1]) : id, g: "ga", at: i });
+    } else {
+      const part = html.slice(i, html.indexOf("</article>", i));
+      const lb = part.match(/<div class="label lbl">([\s\S]*?)<\/div>/), h = part.match(/<h3[^>]*>([\s\S]*?)<\/h3>/), st = part.match(/<span class="ga pv">([\s\S]*?)<\/span>/);
+      const n = lb ? ent(lb[1]) : h ? ent(h[1]) : id, t = h ? ent(h[1]) : "";
+      REG.push({ id, n, d: t && t !== n ? t : "", s: st ? ent(st[1]) : "", g: "la", at: i });
+    }
+  }
+  REG.sort((a, b) => a.at - b.at).forEach((r) => delete r.at);
+}
+const TRACK = REG.length ? `<script>/* product views and interactions: no cookies, see /stats/ */(function(){try{if(navigator.webdriver||location.protocol!=="https:"||!window.IntersectionObserver)return;
+var U=${JSON.stringify(API + "/api/event")},IDS=${JSON.stringify(REG.map((r) => r.id))},sent={},tm={},on={},de=document.documentElement;
+function send(p,k){if(sent[p+k])return;sent[p+k]=1;var d=JSON.stringify({p:p,k:k});try{if(!(navigator.sendBeacon&&navigator.sendBeacon(U,new Blob([d],{type:"text/plain"}))))fetch(U,{method:"POST",body:d,keepalive:true,mode:"no-cors"});}catch(e){}}
+function own(n){for(;n&&n.nodeType===1;n=n.parentNode)if(n.id&&IDS.indexOf(n.id)>=0)return n.id;return null;}
+function busy(){return de.classList.contains("ss-on")||de.classList.contains("pk-on")||document.visibilityState!=="visible";}
+function arm(id){clearTimeout(tm[id]);tm[id]=setTimeout(function(){if(!on[id])return;if(busy())arm(id);else send(id,"view");},3000);}
+var io=new IntersectionObserver(function(es){es.forEach(function(e){var id=e.target.id;on[id]=e.isIntersecting;if(sent[id+"view"])return;if(on[id])arm(id);else clearTimeout(tm[id]);});},{rootMargin:"-30% 0px -30% 0px",threshold:0});
+IDS.forEach(function(id){var n=document.getElementById(id);if(n)io.observe(n);});
+document.addEventListener("click",function(e){var t=e.target&&e.target.closest&&e.target.closest("a,button,summary,img,video,[role=button]");var id=t&&own(t);if(id)send(id,"act");},true);
+var h=location.hash.slice(1);if(h){try{h=decodeURIComponent(h);}catch(e){}var id=own(document.getElementById(h));if(id)send(id,"link");}
+}catch(e){}})();</script>` : "";
 const end = html.lastIndexOf("</body>");
 if (end < 0) throw new Error("no </body> in master");
-html = html.slice(0, end) + BEACON + html.slice(end);
+html = html.slice(0, end) + BEACON + TRACK + html.slice(end);
 fs.rmSync(path.join(ROOT, "site"), { recursive: true, force: true });
 fs.mkdirSync(path.join(ROOT, "site/stats"), { recursive: true });
 fs.writeFileSync(path.join(ROOT, "site/index.html"), html);
@@ -114,6 +147,8 @@ for (const r of refs) {
 const m = html.match(/<header class="mast"><div class="wrap">(<svg class="logo"[\s\S]*?<\/svg>)/);
 if (!m) throw new Error("masthead logo not found");
 let st = fs.readFileSync(path.join(ROOT, "tools/stats-template.html"), "utf8").split("__API__").join(API);
+if (!st.includes("__PRODUCTS__")) throw new Error("stats template has no product list placeholder");
+st = st.split("__PRODUCTS__").join(JSON.stringify(REG).replace(/</g, "\\u003c"));
 st = st.replace(/<!--LOGO-->[\s\S]*?<!--\/LOGO-->/, `<!--LOGO-->${m[1]}<!--/LOGO-->`);
 if (FAV) {
   // the same icons on the stats page (absolute paths), and /favicon.ico at the site root for browsers that ask for it

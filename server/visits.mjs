@@ -52,3 +52,15 @@ export function clientIp(headers, socketIp) {
   const pick = (h) => (h || "").split(",")[0].trim();
   return pick(headers["true-client-ip"]) || pick(headers["cf-connecting-ip"]) || pick(headers["x-forwarded-for"]) || socketIp || "";
 }
+
+// Product events from the guide page (owner, Oct 18): which product, and what happened to it.
+//   view  the product was on screen for 3 seconds (once per open of the guide)
+//   act   a screenshot, link or control inside the product was used (once per open)
+//   link  the guide was opened at the product, usually from a shared link (once per open)
+export const EVENT_KINDS = ["view", "act", "link"];
+export function parseEvent(text) {
+  let j; try { j = JSON.parse(String(text || "").slice(0, 512)); } catch (e) { return null; }
+  const p = j && typeof j.p === "string" ? j.p : "", k = j && typeof j.k === "string" ? j.k : "";
+  if (!/^[a-z0-9][a-z0-9-]{0,47}$/.test(p) || !EVENT_KINDS.includes(k)) return null;
+  return { product: p, kind: k };
+}
