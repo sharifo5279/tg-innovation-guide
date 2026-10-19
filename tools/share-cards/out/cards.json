@@ -151,9 +151,9 @@
   "id": "pv-tgcs",
   "name": "Trading Grid Context Services",
   "screens": [
-   "img/2026-h2/tgcs-why.png",
-   "img/2026-h2/tgcs-sources.png",
-   "img/2026-h2/tgcs-offers.png"
+   "img/2026-h2/tgcs-overview.webp",
+   "img/2026-h2/tgcs-teams.webp",
+   "img/2026-h2/tgcs-servicenow.webp"
   ]
  },
  "aviator-studio": {
