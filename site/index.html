@@ -914,6 +914,19 @@ html[data-theme=dark] .ss-prog button.done::before{background:#6A86BD}
 .ss.dk .ss-prog.grp .pg-l{color:rgba(255,255,255,.6)}
 .ss.dk .ss-prog.grp .pg.on .pg-l{color:#fff}
 @media(max-width:899px){.ss-prog.grp .pg-l{display:none}}
+/* kiosk bar scrolls sideways (owner, Oct 19): numbered steps, every slide reachable, current slide kept in view */
+.ss-prog{overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:rgba(16,28,47,.22) transparent;padding-bottom:2px}
+.ss-prog.fl{-webkit-mask-image:linear-gradient(90deg,transparent,#000 40px);mask-image:linear-gradient(90deg,transparent,#000 40px)}
+.ss-prog.fr{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent)}
+.ss-prog.fl.fr{-webkit-mask-image:linear-gradient(90deg,transparent,#000 40px,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,transparent,#000 40px,#000 calc(100% - 40px),transparent)}
+.ss-prog button{font:600 11px/14px Inter,Arial,sans-serif;letter-spacing:0;color:var(--slate);text-align:center;font-variant-numeric:tabular-nums}
+.ss-prog button::before{margin-bottom:4px}
+.ss-prog button:hover,.ss-prog button[aria-current=step]{color:var(--blue)}
+.ss-prog.grp .pg{flex-shrink:0;flex-basis:auto}
+.ss-prog.grp .pg0{flex:0 0 auto}
+.ss-prog.grp .pg-b button{flex:1 0 26px;padding:8px 0 2px}
+.ss.dk .ss-prog{scrollbar-color:rgba(255,255,255,.3) transparent}
+.ss.dk .ss-prog button{color:rgba(255,255,255,.6)}.ss.dk .ss-prog button:hover,.ss.dk .ss-prog button[aria-current=step]{color:#fff}
 
 /* Looking ahead: coming-soon placeholder */
 .inn.soon .soon-ph{display:flex;align-items:center;justify-content:center;gap:10px;min-height:120px;max-width:680px;border:2px dashed var(--line);border-radius:12px;background:var(--cloud);color:var(--slate);font-weight:600;font-size:16px;letter-spacing:.02em}
@@ -4747,6 +4760,8 @@ dlg.addEventListener('close',function(){st.innerHTML='';show(zi);op.focus({preve
     var wAcc=0,wLast=0,wStep=0;
     ov.addEventListener('wheel',function(e){
       uiShow();
+      var pr=e.target.closest&&e.target.closest('.ss-prog');
+      if(pr&&pr.scrollWidth>pr.clientWidth+1){e.preventDefault();progT=Date.now();var dx=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY;if(e.deltaMode===1)dx*=16;pr.scrollLeft+=dx;return;}
       if(!conf||e.ctrlKey||(pk&&!pk.hidden))return;
       e.preventDefault();
       var now=performance.now();
@@ -4759,7 +4774,8 @@ dlg.addEventListener('close',function(){st.innerHTML='';show(zi);op.focus({preve
       if(Math.abs(wAcc)<(notch?40:90)||now-wStep<(notch?100:250))return;
       wStep=now;var down=wAcc>0;wAcc=0;bumpIdle();if(down)fwd();else back();
     },{passive:false});
-    window.addEventListener('resize',function(){if(ov&&!ov.hidden)uiShow();});
+    window.addEventListener('resize',function(){if(ov&&!ov.hidden){uiShow();progEdges();}});
+    prog.addEventListener('scroll',progEdges,{passive:true});prog.addEventListener('pointerdown',function(){progT=Date.now();});
     prevB.addEventListener('click',back);nextB.addEventListener('click',fwd);
     $('.ss-close',ov).addEventListener('click',close);
     fsB.addEventListener('click',function(){if(fsEl()===ov){keepOpen=true;exitFs();}else reqFs();});
@@ -4918,12 +4934,17 @@ dlg.addEventListener('close',function(){st.innerHTML='';show(zi);op.focus({preve
   function setSpeed(n){speed=n;if(ov)$$('[data-spd]',ov).forEach(function(b){b.setAttribute('aria-pressed',+b.getAttribute('data-spd')===n?'true':'false');});if(conf&&ov&&!ov.hidden)schedule();}
   // at a booth: if someone pauses and walks away, the loop picks up again after 90 seconds without input
   function bumpIdle(){if(!conf||playing)return;if(idleT)clearTimeout(idleT);idleT=setTimeout(function(){idleT=null;if(!ov||ov.hidden||!conf)return;if(pk&&!pk.hidden)pkClose(true);if(zm)zm.hidden=true;resumeT();},90000);}
+  var progT=0;
+  function progEdges(){if(!prog)return;var m=prog.scrollWidth-prog.clientWidth;prog.classList.toggle('fl',prog.scrollLeft>2);prog.classList.toggle('fr',m-prog.scrollLeft>2);}
+  function progFollow(){var b=$$('button',prog)[cur];if(!b||Date.now()-progT<4000){progEdges();return;}var P=prog.getBoundingClientRect(),r=b.getBoundingClientRect(),pad=64;
+    if(r.left<P.left+pad||r.right>P.right-pad){var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;prog.scrollTo({left:prog.scrollLeft+(r.left+r.width/2)-(P.left+P.width/2),behavior:rm?'auto':'smooth'});}progEdges();}
   function chrome(){
     cnt.textContent=(cur+1)+' / '+slides.length;
     var x=slides[cur],n=frameCount(x);
     prevB.disabled=!conf&&cur===0&&si===0;nextB.disabled=!conf&&cur===slides.length-1&&si>=n-1;
     $$('.pg',prog).forEach(function(g){g.classList.toggle('on',!!g.querySelector('button:nth-child(n)')&&$$('button',g).indexOf($$('button',prog)[cur])>-1);});
     $$('button',prog).forEach(function(b,j){b.classList.toggle('done',j<cur);if(j===cur)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');});
+    progFollow();
     if(!ov.contains(document.activeElement)||document.activeElement.disabled)stage.focus({preventScroll:true});
   }
   function go(i,dir,last){
@@ -4974,11 +4995,12 @@ dlg.addEventListener('close',function(){st.innerHTML='';show(zi);op.focus({preve
     build();deck=d;slides=d.slides;opener=btn;navTo=null;savedY=window.pageYOffset;
     conf=!!d.conf;ov.classList.toggle('conf',conf);confEl.hidden=!conf;playing=true;if(idleT){clearTimeout(idleT);idleT=null;}playUI();setSpeed(speed);uiShow();
     areaL.textContent=d.name;ov.setAttribute('aria-label',d.name+', slide show');
-    var pb=function(x,i){return '<button type="button" aria-label="Slide '+(i+1)+': '+esc(x.title)+'"></button>';};
+    var pb=function(x,i){return '<button type="button" aria-label="Slide '+(i+1)+': '+esc(x.title)+'">'+(i+1)+'</button>';};
     prog.classList.toggle('grp',conf);
     secS=[];if(conf){var gs=[];slides.forEach(function(x,i){var k=x.t==='cover'?'':(x.prog||x.sec||'');var g=gs[gs.length-1];if(!g||g.k!==k){g={k:k,s:i,h:''};gs.push(g);}g.h+=pb(x,i);});secS=gs.map(function(g){return g.s;});
       prog.innerHTML=gs.map(function(g){var n=(g.h.match(/<button/g)||[]).length;return '<div class="pg'+(g.k?'':' pg0')+'" style="flex-grow:'+n+'"><div class="pg-b">'+g.h+'</div>'+(g.k?'<span class="pg-l" data-go="'+g.s+'">'+esc(g.k)+'</span>':'')+'</div>';}).join('');}
     else prog.innerHTML=slides.map(pb).join('');
+    prog.scrollLeft=0;progT=0;
     inerted=[].slice.call(document.body.children).filter(function(e){return e!==ov&&!e.inert&&e.tagName!=='SCRIPT'&&e.tagName!=='STYLE';});
     inerted.forEach(function(e){e.inert=true;});
     document.documentElement.classList.add('ss-on');
