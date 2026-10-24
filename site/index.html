@@ -5132,10 +5132,13 @@ dlg.addEventListener('close',function(){st.innerHTML='';show(zi);op.focus({preve
   },true);
   $$('#in-action a[href^="#"], #scn-aviator a[href^="#"]').forEach(function(a){if(capTarget(a))a.setAttribute('aria-haspopup','dialog');});
   var gaSecs=$$('#generally-available section.sec').filter(function(x){return $('article.inn:not([data-soon])',x);});
+  // OpenText World 2026 kiosk mode, archived after the event (Oct 2026). All kiosk code stays in the page. KIOSK_ON=true brings
+  // back the banner button, the footer link and the #conference deep link. Structure and revival: archive/otw-2026-kiosk/README.md
+  var KIOSK_ON=false;
   var hn=$('.hero>.wrap');
-  if(hn){var cb=document.createElement('button');cb.type='button';cb.className='conf-btn';cb.innerHTML=IC.play+'<span>OpenText World 2026 Kiosk Mode</span>';
+  if(KIOSK_ON&&hn){var cb=document.createElement('button');cb.type='button';cb.className='conf-btn';cb.innerHTML=IC.play+'<span>OpenText World 2026 Kiosk Mode</span>';
     cb.title='Runs every generally available capability and scenario on a loop';cb.addEventListener('click',function(){open(confDeck(),0,cb);});hn.appendChild(cb);}
-  var ch=/^#conference(?:-([123])x)?$/.exec(location.hash);
+  var ch=KIOSK_ON&&/^#conference(?:-([123])x)?$/.exec(location.hash);
   if(ch&&!(window.matchMedia&&matchMedia('(max-width:899px),(pointer:coarse) and (max-height:520px)').matches)){if(ch[1])speed=+ch[1];setTimeout(function(){open(confDeck(),0,null);},300);}
 })();
 </script>

@@ -666,6 +666,9 @@
   }
   /* phones: the guide's OpenText World kiosk mode is not offered there, so neither are the links into it */
   @media (max-width:899px),(pointer:coarse) and (max-height:520px){.kioskbtn,.hm[data-act="kiosk"]{display:none}}
+  /* OpenText World 2026 is over: the guide's kiosk mode is archived (see archive/otw-2026-kiosk/README.md), so every
+     link into it is hidden while KIOSK_ON is false */
+  html.nokiosk .kioskbtn,html.nokiosk .hm[data-act="kiosk"],html.nokiosk .kh{display:none}
 </style>
 <script>/* count one Grid Runner run: no cookies, see /stats/ */window.grPlayed=function(){try{if(navigator.webdriver||location.protocol!=="https:")return;var u="https://tg-guide-stats.onrender.com/api/play",b=new Blob(["{}"],{type:"text/plain"});if(!(navigator.sendBeacon&&navigator.sendBeacon(u,b)))fetch(u,{method:"POST",body:"{}",keepalive:true,mode:"no-cors"});}catch(e){}};</script></head>
 <body>
@@ -721,7 +724,7 @@
         <span><b>hold space</b>fire</span>
         <span><b>p</b>hold</span>
         <span><b>s</b>settings</span>
-        <span><b>k</b>guide kiosk</span>
+        <span class="kh"><b>k</b>guide kiosk</span>
         <span><b>esc</b>menu</span>
       </div>
       <div id="titlebtns">
@@ -833,6 +836,10 @@
 
 <script>
 "use strict";
+/* Links into the Innovation Guide's OpenText World kiosk mode. Off since OTW 2026 ended (Oct 2026); set true to revive
+   together with KIOSK_ON in the guide master. See archive/otw-2026-kiosk/README.md. */
+const KIOSK_ON = false;
+if (!KIOSK_ON) document.documentElement.classList.add('nokiosk');
 /* ============================================================
    GRIDRUNNER · a Trading Grid arcade
    Catch clean documents. Reject malformed ones. Survive peak.
@@ -1760,14 +1767,14 @@ function padHints(){
   if (!c || !ps) return;
   if (!padKeep) padKeep = { c: c.innerHTML, ps: ps.textContent };
   c.innerHTML = on ? '<span><b>LS</b>route</span><span><b>A / RT</b>fire</span><span><b>menu</b>hold</span><span><b>view</b>settings</span>' +
-    (n > 1 ? '<span><b>controller 2 &middot; A</b>co-op</span>' : '') + '<span><b>Y</b>guide kiosk</span><span><b>B</b>menu</span>' : padKeep.c;
+    (n > 1 ? '<span><b>controller 2 &middot; A</b>co-op</span>' : '') + '<span class="kh"><b>Y</b>guide kiosk</span><span><b>B</b>menu</span>' : padKeep.c;
   ps.textContent = on ? (n > 1 ? 'Press A to clock in · A on controller 2 for co-op' : 'Press A to clock in') : padKeep.ps;
   document.querySelectorAll('.kioskbtn .kk').forEach(k => { k.textContent = on ? '(Y)' : '(K)'; });
   el.againbtn.textContent = on ? 'Run it back (A)' : 'Run it back (Enter)';
 }
 /* back to the Innovation Guide, straight into its OpenText World kiosk mode (the guide opens it from #conference) */
 function goKiosk(){
-  if (demo) return;
+  if (demo || !KIOSK_ON) return;
   stopFire();
   try { sfx.ui(); } catch (e) {}
   location.href = '/#conference';
@@ -2636,7 +2643,7 @@ function gameOver(){
    During a shift it holds the grid; on the title or review screen Esc opens the same menu, so there is
    always one obvious way out: back to the title, the Innovation Guide kiosk, or the guide itself. */
 let menuOpen = false, menuIdx = 0;
-function menuItems(){ const ph = matchMedia('(max-width:899px),(pointer:coarse) and (max-height:520px)').matches; return [...el.pause.querySelectorAll('.hm')].filter(b => !b.hidden && !(ph && b.dataset.act === 'kiosk')); }
+function menuItems(){ const ph = matchMedia('(max-width:899px),(pointer:coarse) and (max-height:520px)').matches; return [...el.pause.querySelectorAll('.hm')].filter(b => !b.hidden && !((ph || !KIOSK_ON) && b.dataset.act === 'kiosk')); }
 function menuFocus(i){
   const it = menuItems(); if (!it.length) return;
   menuIdx = (i + it.length) % it.length;

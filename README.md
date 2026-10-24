@@ -15,7 +15,9 @@ names (Trading Grid Data Platform, Trading Grid Decisions Intelligence, Command 
 a game controller (Gamepad API, standard mapping, such as an Xbox controller over Bluetooth or USB): left stick or d-pad
 routes, A, RB or RT fires, Menu starts and holds, B resumes, View opens settings; rumble in Chrome and Edge.
 
-Kiosk behaviour (OpenText World):
+Kiosk behaviour (OpenText World). The guide's kiosk mode and the game's links into it are archived and switched off since
+Oct 24, 2026 (`KIOSK_ON=false`); see `archive/otw-2026-kiosk/README.md`. The game's own co-op, attract mode and controller
+support below remain active.
 - Two-controller co-op: controller 2 presses A on the title for a co-op shift, or A mid-shift to join. Two routers
   (P1 blue, P2 amber) defend one network: shared score, escalations, weapon and power-ups, separate validator heat,
   about 15% more traffic. A dropped controller 2 returns the shift to solo; a dropped controller 1 holds it.
