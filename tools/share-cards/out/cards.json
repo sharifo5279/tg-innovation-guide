@@ -95,6 +95,13 @@
    "img/2026-h2/tgc-rule-explorer.webp"
   ]
  },
+ "administration": {
+  "id": "ga-tg-administration",
+  "name": "Trading Grid Administration",
+  "screens": [
+   "img/2026-h2/tgadm-overview-v2.webp"
+  ]
+ },
  "performance-monitor": {
   "id": "pv-ccpm",
   "name": "Command Center Performance Monitor",
@@ -123,10 +130,19 @@
  },
  "partner-hub": {
   "id": "pv-tgph",
-  "name": "Partner Hub",
+  "name": "Trading Grid Partner Hub",
   "screens": [
    "img/2026-h2/tgph-partner-view.webp",
    "img/2026-h2/tgph-program.webp"
+  ]
+ },
+ "insights-ui-refresh": {
+  "id": "pv-tgi-jato",
+  "name": "A refreshed interface on JATO UX",
+  "screens": [
+   "img/2026-h2/tgi-jato-transactions.png",
+   "img/2026-h2/tgi-jato-blended.png",
+   "img/2026-h2/tgi-jato-status.png"
   ]
  },
  "decisions-intelligence": {
